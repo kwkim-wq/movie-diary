@@ -234,6 +234,18 @@ textarea.input { resize: none; line-height: 1.6; }
   .hero-stack .hero-stats { gap: 24px !important; }
 }
 
+/* Stats grid (StatsPage) — 2 columns desktop, 1 column phone. The monthly
+ * chart card overrides this with `gridColumn: '1 / -1'` so it always spans
+ * the full row. */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+@media (max-width: 767px) {
+  .stats-grid { grid-template-columns: 1fr; }
+}
+
 /* Mobile: full-screen modal. */
 @media (max-width: 480px) {
   .movie-modal {

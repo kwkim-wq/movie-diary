@@ -5,7 +5,7 @@
 //   /lists                → PlaceholderPage ("리스트 — 준비 중")
 //   /actors               → ActorsPage
 //   /actor/:id            → ActorDetailPage
-//   /stats                → PlaceholderPage ("통계 — 준비 중")
+//   /stats                → StatsPage
 //   /settings             → SettingsPage
 //   /entry/:id            → DetailPage
 //   *                     → NotFoundPage
@@ -23,6 +23,7 @@ import { ListPage } from './routes/ListPage';
 import { NotFoundPage } from './routes/NotFoundPage';
 import { PlaceholderPage } from './routes/PlaceholderPage';
 import { SettingsPage } from './routes/SettingsPage';
+import { StatsPage } from './routes/StatsPage';
 import { MoviesProvider } from './store/MoviesContext';
 
 function App() {
@@ -42,10 +43,7 @@ function App() {
           />
           <Route path="/actors" element={<ActorsPage />} />
           <Route path="/actor/:id" element={<ActorDetailPage />} />
-          <Route
-            path="/stats"
-            element={<PlaceholderPage label="통계 — 준비 중" activeNav="stats" />}
-          />
+          <Route path="/stats" element={<StatsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/entry/:id" element={<DetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
