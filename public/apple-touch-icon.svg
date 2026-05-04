@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" width="180" height="180">
+  <rect width="1024" height="1024" fill="#14181C"/>
+  <rect x="160" y="448" width="704" height="384" rx="20" ry="20" fill="#2C3440"/>
+  <rect x="160" y="448" width="704" height="120" fill="#E5E7EB"/>
+  <g fill="#14181C">
+    <path d="M236 448 L332 448 L268 568 L172 568 Z"/>
+    <path d="M408 448 L504 448 L440 568 L344 568 Z"/>
+    <path d="M580 448 L676 448 L612 568 L516 568 Z"/>
+    <path d="M752 448 L848 448 L784 568 L688 568 Z"/>
+  </g>
+  <rect x="160" y="566" width="704" height="4" fill="#14181C"/>
+  <rect x="208" y="640" width="608" height="10" rx="2" fill="#E5E7EB" opacity="0.85"/>
+  <rect x="208" y="720" width="448" height="10" rx="2" fill="#E5E7EB" opacity="0.85"/>
+  <circle cx="200" cy="488" r="10" fill="#14181C"/>
+  <circle cx="824" cy="488" r="10" fill="#14181C"/>
+  <g transform="rotate(-14 200 448)">
+    <rect x="160" y="328" width="704" height="120" fill="#E5E7EB"/>
+    <g fill="#14181C">
+      <path d="M236 328 L332 328 L268 448 L172 448 Z"/>
+      <path d="M408 328 L504 328 L440 448 L344 448 Z"/>
+      <path d="M580 328 L676 328 L612 448 L516 448 Z"/>
+      <path d="M752 328 L848 328 L784 448 L688 448 Z"/>
+    </g>
+    <rect x="160" y="446" width="704" height="4" fill="#14181C"/>
+  </g>
+  <circle cx="200" cy="448" r="14" fill="#14181C"/>
+</svg>
