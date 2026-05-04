@@ -11,6 +11,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { AppHeader, type NavKey } from '../components/AppHeader';
 import { EmptyState } from '../components/EmptyState';
 import { MovieCard } from '../components/MovieCard';
+import { Poster } from '../components/Poster';
 import { Stars } from '../components/Stars';
 import { useMovies } from '../hooks/useMovies';
 import type { MovieEntry, SortKey, ViewMode } from '../types';
@@ -421,7 +422,7 @@ function ListBody({
           }}
           style={{
             display: 'grid',
-            gridTemplateColumns: '110px 1fr 140px 100px',
+            gridTemplateColumns: '40px 110px 1fr 140px 100px',
             alignItems: 'center',
             gap: 18,
             padding: '14px 0',
@@ -429,6 +430,23 @@ function ListBody({
             cursor: 'pointer',
           }}
         >
+          <div
+            style={{
+              width: 40,
+              aspectRatio: '2/3',
+              borderRadius: 3,
+              overflow: 'hidden',
+              flexShrink: 0,
+              background: 'var(--bg-2)',
+            }}
+          >
+            <Poster
+              posterPath={entry.posterPath}
+              posterKind={entry.posterKind}
+              title={entry.title}
+              size="card"
+            />
+          </div>
           <div style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500 }}>
             {fmt.format(new Date(entry.watched))}
           </div>
