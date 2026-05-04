@@ -190,4 +190,16 @@ export function getStorageUsage(): { bytes: number; percent: number } {
   };
 }
 
+/**
+ * Wipe everything Movie Diary keeps in localStorage — main state and the
+ * in-flight modal draft. Used by the Settings page "모든 데이터 지우기" action.
+ * Callers are responsible for re-seeding state via dispatch({ type: 'importState' })
+ * with a fresh defaultState() so the in-memory tree matches storage.
+ */
+export function clearAll(): void {
+  if (typeof window === 'undefined') return;
+  window.localStorage.removeItem(STATE_KEY);
+  window.localStorage.removeItem(DRAFT_KEY);
+}
+
 export const STORAGE_KEYS = { state: STATE_KEY, draft: DRAFT_KEY } as const;

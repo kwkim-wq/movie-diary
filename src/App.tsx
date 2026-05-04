@@ -6,6 +6,7 @@
 //   /actors               → ActorsPage
 //   /actor/:id            → ActorDetailPage
 //   /stats                → PlaceholderPage ("통계 — 준비 중")
+//   /settings             → SettingsPage
 //   /entry/:id            → DetailPage
 //   *                     → NotFoundPage
 //
@@ -21,6 +22,7 @@ import { DetailPage } from './routes/DetailPage';
 import { ListPage } from './routes/ListPage';
 import { NotFoundPage } from './routes/NotFoundPage';
 import { PlaceholderPage } from './routes/PlaceholderPage';
+import { SettingsPage } from './routes/SettingsPage';
 import { MoviesProvider } from './store/MoviesContext';
 
 function App() {
@@ -44,6 +46,7 @@ function App() {
             path="/stats"
             element={<PlaceholderPage label="통계 — 준비 중" activeNav="stats" />}
           />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/entry/:id" element={<DetailPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

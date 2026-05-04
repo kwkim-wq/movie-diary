@@ -3,7 +3,10 @@
 //
 // Phase 6 added: responsive nav scrolling (.nav-scroller), shrinking padding via
 // `.app-header-bar`, and a hidden "+ 새 영화 기록" label on phone widths.
+// Phase 8 added: a settings cog rendered next to the search input — only when
+// `showSearch` is on, since detail/actor pages render their own right slot.
 
+import { useNavigate } from 'react-router-dom';
 import type { ReactNode } from 'react';
 
 export type NavKey = 'all' | 'year' | 'liked' | 'lists' | 'actors' | 'stats';
@@ -54,6 +57,7 @@ export function AppHeader({
   onCreate,
   onNavClick,
 }: AppHeaderProps) {
+  const navigate = useNavigate();
   return (
     <div style={{ borderBottom: '1px solid var(--rule)', background: 'var(--bg)' }}>
       <div
@@ -168,39 +172,63 @@ export function AppHeader({
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
             {showSearch && (
-              <div className="header-search" style={{ position: 'relative', width: 240 }}>
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="#9CA3AF"
-                  strokeWidth="2"
-                  style={{
-                    position: 'absolute',
-                    left: 12,
-                    top: '50%',
-                    transform: 'translateY(-50%)',
-                  }}
-                  aria-hidden="true"
+              <>
+                <div className="header-search" style={{ position: 'relative', width: 240 }}>
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="#9CA3AF"
+                    strokeWidth="2"
+                    style={{
+                      position: 'absolute',
+                      left: 12,
+                      top: '50%',
+                      transform: 'translateY(-50%)',
+                    }}
+                    aria-hidden="true"
+                  >
+                    <circle cx="11" cy="11" r="7" />
+                    <path d="m20 20-3.5-3.5" />
+                  </svg>
+                  <input
+                    className="input"
+                    placeholder="영화, 감독 검색…"
+                    value={searchValue}
+                    onChange={(e) => onSearchChange?.(e.target.value)}
+                    aria-label="영화 검색"
+                    style={{
+                      paddingLeft: 34,
+                      fontSize: 13,
+                      padding: '8px 14px 8px 34px',
+                      background: 'var(--bg-2)',
+                    }}
+                  />
+                </div>
+                <button
+                  type="button"
+                  className="btn-icon"
+                  aria-label="설정"
+                  title="설정"
+                  onClick={() => navigate('/settings')}
                 >
-                  <circle cx="11" cy="11" r="7" />
-                  <path d="m20 20-3.5-3.5" />
-                </svg>
-                <input
-                  className="input"
-                  placeholder="영화, 감독 검색…"
-                  value={searchValue}
-                  onChange={(e) => onSearchChange?.(e.target.value)}
-                  aria-label="영화 검색"
-                  style={{
-                    paddingLeft: 34,
-                    fontSize: 13,
-                    padding: '8px 14px 8px 34px',
-                    background: 'var(--bg-2)',
-                  }}
-                />
-              </div>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <circle cx="12" cy="12" r="3" />
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                  </svg>
+                </button>
+              </>
             )}
             <button
               type="button"
