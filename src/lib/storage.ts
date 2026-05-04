@@ -1,7 +1,7 @@
 // localStorage adapter for Movie Diary.
 // Storage schema: design-handoff/handoff.html §7.
 
-import type { AppState, ExportPayload, MovieEntry } from '../types';
+import type { AppState, CastMember, ExportPayload, MovieEntry } from '../types';
 
 const STATE_KEY = 'movieDiary.v1';
 const DRAFT_KEY = 'movieDiary.draft';
@@ -33,6 +33,41 @@ function isAppState(value: unknown): value is AppState {
 }
 
 /**
+ * Sanitise a single cast member record loaded from storage. Missing values are
+ * coerced to safe defaults; bad rows are dropped by the caller.
+ */
+function normalizeCastMember(raw: unknown): CastMember | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Partial<CastMember>;
+  if (typeof r.id !== 'number') return null;
+  return {
+    id: r.id,
+    name: typeof r.name === 'string' ? r.name : '',
+    character: typeof r.character === 'string' ? r.character : '',
+    profilePath: typeof r.profilePath === 'string' ? r.profilePath : null,
+    liked: r.liked === true,
+  };
+}
+
+/**
+ * Forward-compatible migration for entries persisted before the cast feature
+ * shipped. Older rows have no `cast` field — we backfill `[]` so consumers can
+ * always assume `entry.cast: CastMember[]`. Version key stays `movieDiary.v1`
+ * because existing user data is preserved without conversion.
+ */
+function migrateEntries(entries: MovieEntry[]): MovieEntry[] {
+  return entries.map((e) => {
+    const rawCast = (e as { cast?: unknown }).cast;
+    const cast = Array.isArray(rawCast)
+      ? rawCast
+          .map(normalizeCastMember)
+          .filter((c): c is CastMember => c !== null)
+      : [];
+    return { ...e, cast };
+  });
+}
+
+/**
  * Load state from localStorage. On any parse / shape failure we log and return
  * the default — never silently overwrite. (Plan §3, "에러 처리".)
  */
@@ -46,10 +81,11 @@ export function loadState(): AppState {
       console.error('[storage] movieDiary.v1 has unexpected shape; using defaults.', parsed);
       return defaultState();
     }
-    // Backfill any new settings keys without losing user data.
+    // Backfill any new settings keys without losing user data, and migrate
+    // older entries that pre-date the `cast` field.
     return {
       settings: { ...defaultState().settings, ...parsed.settings },
-      entries: parsed.entries,
+      entries: migrateEntries(parsed.entries as MovieEntry[]),
     };
   } catch (err) {
     console.error('[storage] Failed to parse movieDiary.v1; using defaults.', err);
@@ -133,7 +169,12 @@ export function importJSON(text: string): AppState {
   if (malformed !== undefined) {
     throw new Error('일부 기록의 형식이 올바르지 않습니다.');
   }
-  return obj.state;
+  // Apply the same cast backfill used on local load so an older export still
+  // hydrates into a consistent shape.
+  return {
+    ...obj.state,
+    entries: migrateEntries(obj.state.entries as MovieEntry[]),
+  };
 }
 
 /** Approximate localStorage usage. Returns bytes + percent of a 5 MB budget. */

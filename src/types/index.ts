@@ -36,6 +36,43 @@ export interface Settings {
 }
 
 /**
+ * One member of the movie's cast — captured at the time of recording so the
+ * "내가 좋아한 배우" page works even when offline / TMDB is rate-limited.
+ *
+ * `id` is the TMDB person id; this is what the actor pages route on.
+ * `liked` is per-entry: a user can flag the same actor on one record but not
+ * another (rare, but the simplest model — `getCastById` aggregates with OR).
+ */
+export interface CastMember {
+  /** TMDB person id. */
+  id: number;
+  /** Korean name (TMDB credits ?language=ko-KR). */
+  name: string;
+  /** Character name as listed on TMDB. */
+  character: string;
+  /** TMDB profile_path, e.g. "/abc.jpg". null when TMDB has no headshot. */
+  profilePath: string | null;
+  /** Whether the user hearted this actor on this entry. */
+  liked: boolean;
+}
+
+/**
+ * Aggregated row used by the /actors page (one row per unique actor across the
+ * whole library). Built by `aggregateActors()` in lib/filters.ts.
+ */
+export interface ActorSummary {
+  id: number;
+  name: string;
+  profilePath: string | null;
+  /** How many MovieEntry records mention this actor. */
+  movieCount: number;
+  /** True if the user hearted this actor on at least one entry. */
+  likedInAny: boolean;
+  /** Mean rating of the entries this actor appears in. NaN when no rated entry. */
+  averageRating: number;
+}
+
+/**
  * One viewing record — a "page" in the diary. The same movie watched twice yields
  * two MovieEntry rows (so the rating/note can differ). Group by `tmdbId` for the
  * detail page's "previous viewings" timeline.
@@ -71,6 +108,11 @@ export interface MovieEntry {
   tags: string[];
   /** Heart-favourite flag. */
   liked: boolean;
+  /**
+   * Top 6–8 cast members captured from TMDB at record-time. Always an array
+   * (older v1 entries are migrated to `[]` on load — see lib/storage.ts).
+   */
+  cast: CastMember[];
   /** ISO 8601 — when the entry was first created. */
   createdAt: string;
   /** ISO 8601 — last modification. */
@@ -114,6 +156,19 @@ export interface TmdbMovieDetails extends TmdbSearchResult {
   cast: string[]; // top 2 names
 }
 
+/**
+ * Trimmed cast row from `/movie/:id/credits`. Mapped from TMDB's snake_case
+ * shape; we only keep what the actor UI actually consumes.
+ */
+export interface TmdbCastMember {
+  id: number;
+  name: string;
+  character: string;
+  profilePath: string | null;
+  /** Lower = more prominent role (used to pick the top N). */
+  order: number;
+}
+
 /** Tagged error classes — callers branch on `instanceof` for nice UX. */
 export class TmdbAuthError extends Error {
   constructor(message = 'TMDB API 키가 유효하지 않습니다.') {
@@ -153,6 +208,8 @@ export interface MovieDraft {
   note: string;
   tags: string[];
   liked: boolean;
+  /** Cast prefilled from TMDB credits when the user picked an autocomplete row. */
+  cast: CastMember[];
   /** UTC timestamp the draft was last saved. */
   savedAt: string;
 }

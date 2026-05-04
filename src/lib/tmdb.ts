@@ -17,6 +17,7 @@ import {
   TmdbAuthError,
   TmdbNetworkError,
   TmdbRateLimitError,
+  type TmdbCastMember,
   type TmdbMovieDetails,
   type TmdbSearchResult,
 } from '../types';
@@ -189,6 +190,57 @@ export async function getMovieDetails(
     director,
     cast,
   };
+}
+
+interface RawCreditsResponse {
+  id?: number;
+  cast?: Array<{
+    id?: number;
+    name?: string;
+    character?: string;
+    profile_path?: string | null;
+    order?: number;
+  }>;
+}
+
+/**
+ * `/movie/:id/credits` — top-N cast for the movie, sorted by TMDB's `order`
+ * field (lower = more prominent). The reply is reused via the same 5-min
+ * in-memory cache as the other endpoints.
+ *
+ * @param topN  How many cast rows to return after sorting. Default = 8.
+ */
+export async function getMovieCredits(
+  movieId: number,
+  key: string,
+  opts: FetchOptions & { topN?: number } = {},
+): Promise<{ cast: TmdbCastMember[] }> {
+  const path = `/movie/${movieId}/credits`;
+  const json = await tmdbFetch<RawCreditsResponse>(path, key, opts);
+  const topN = opts.topN ?? 8;
+  const cast = (json.cast ?? [])
+    .filter((c) => typeof c.id === 'number')
+    // Treat missing `order` as last so well-formed entries always rank first.
+    .slice()
+    .sort((a, b) => (a.order ?? 9999) - (b.order ?? 9999))
+    .slice(0, topN)
+    .map<TmdbCastMember>((c) => ({
+      id: c.id as number,
+      name: c.name ?? '',
+      character: c.character ?? '',
+      profilePath: c.profile_path ?? null,
+      order: c.order ?? 9999,
+    }));
+  return { cast };
+}
+
+/** TMDB profile image URL (built-in /t/p/<size> CDN). */
+export function profileUrl(
+  path: string | null,
+  size: 'w45' | 'w185' | 'w342' | 'h632' = 'w185',
+): string | null {
+  if (!path) return null;
+  return `${IMG_BASE}/${size}${path}`;
 }
 
 /** Test hook — clears the in-memory cache. Useful for debugging in dev tools. */

@@ -10,7 +10,7 @@
 //     page's "previous viewings" group-by works once Phase 4 lights it up.
 
 import { entryId } from '../lib/id';
-import type { MovieEntry, PosterKind } from '../types';
+import type { CastMember, MovieEntry, PosterKind } from '../types';
 
 interface RawSample {
   title: string;
@@ -25,6 +25,8 @@ interface RawSample {
   genres: string[];
   note: string;
   tmdbId: number;
+  /** Optional curated demo cast (TMDB person ids). */
+  cast?: CastMember[];
 }
 
 const RAW: RawSample[] = [
@@ -41,6 +43,10 @@ const RAW: RawSample[] = [
     genres: ['로맨스', '드라마'],
     note: '복도와 계단, 빨간 벽지의 호텔. 첼로의 한 음이 끝없이 늘어진다. 두 사람은 서로의 삶을 거울처럼 비추다, 결국 비밀 하나를 나무 구멍에 묻고 떠난다. 절제된 슬픔이 이렇게 사치스러울 수 있나.',
     tmdbId: 843,
+    cast: [
+      { id: 1620, name: '양조위', character: '차우 모완', profilePath: null, liked: true },
+      { id: 1339, name: '장만옥', character: '수 리젠', profilePath: null, liked: false },
+    ],
   },
   {
     title: '2001 스페이스 오디세이',
@@ -125,6 +131,11 @@ const RAW: RawSample[] = [
     genres: ['스릴러', '드라마'],
     note: '복수는 식어야 맛있다고 했던가. 복도 격투신은 오래 잊히지 않는다.',
     tmdbId: 670,
+    cast: [
+      { id: 8255, name: '최민식', character: '오대수', profilePath: null, liked: true },
+      { id: 9046, name: '유지태', character: '이우진', profilePath: null, liked: false },
+      { id: 9047, name: '강혜정', character: '미도', profilePath: null, liked: false },
+    ],
   },
   {
     title: '8½',
@@ -153,6 +164,13 @@ const RAW: RawSample[] = [
     genres: ['스릴러', '블랙코미디'],
     note: '계단의 영화. 위에서 아래로, 아래에서 더 아래로. 비 오는 밤 반지하로 흐르는 물의 색.',
     tmdbId: 496243,
+    cast: [
+      { id: 70264, name: '송강호', character: '기택', profilePath: null, liked: true },
+      { id: 1257672, name: '이선균', character: '동익', profilePath: null, liked: false },
+      { id: 1535532, name: '조여정', character: '연교', profilePath: null, liked: false },
+      { id: 2153126, name: '최우식', character: '기우', profilePath: null, liked: false },
+      { id: 1535533, name: '박소담', character: '기정', profilePath: null, liked: true },
+    ],
   },
 ];
 
@@ -174,6 +192,7 @@ function buildEntry(raw: RawSample): MovieEntry {
     note: raw.note,
     tags: [],
     liked: false,
+    cast: raw.cast ?? [],
     createdAt: watchedISO,
     updatedAt: watchedISO,
   };
