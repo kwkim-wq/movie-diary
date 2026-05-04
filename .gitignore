@@ -1,5 +1,11 @@
 .claude/settings.local.json
 
+# Playwright/screenshot artifacts (per session, not source)
+.playwright-mcp/
+*.png
+!public/**/*.png
+!src/**/*.png
+
 # Logs
 logs
 *.log
