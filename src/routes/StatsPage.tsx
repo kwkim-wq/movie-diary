@@ -231,75 +231,94 @@ function StatCard({ title, subtitle, fullWidth, children }: StatCardProps) {
 
 function MonthlyChart({ data }: { data: MonthlyCount[] }) {
   const max = Math.max(...data.map((d) => d.count), 1);
-  // 12 bars across a 480 viewBox: 40px slot per bar, 28px bar, 6px padding.
-  const slotWidth = 40;
-  const barWidth = 28;
-  const chartHeight = 140;
-  const baselineY = 150;
-  const totalWidth = data.length * slotWidth + 16; // small left/right padding
   const totalCount = data.reduce((s, d) => s + d.count, 0);
 
   if (totalCount === 0) {
-    return (
-      <ChartEmpty>최근 12개월 동안 기록된 영화가 없어요.</ChartEmpty>
-    );
+    return <ChartEmpty>최근 12개월 동안 기록된 영화가 없어요.</ChartEmpty>;
   }
 
+  // HTML/CSS bars instead of SVG so font sizes don't scale with the card
+  // width and the count label sits cleanly above the bar.
+  const PLOT_HEIGHT = 140; // px
+
   return (
-    <svg
-      viewBox={`0 0 ${totalWidth} 180`}
-      style={{
-        width: '100%',
-        maxWidth: 640,
-        height: 'auto',
-        display: 'block',
-        margin: '0 auto',
-      }}
+    <div
       role="img"
       aria-label="최근 12개월 월별 시청 편수"
+      style={{ width: '100%' }}
     >
-      {/* Baseline */}
-      <line x1={8} x2={totalWidth - 8} y1={baselineY} y2={baselineY} stroke="var(--rule)" strokeWidth={1} />
-      {data.map((m, i) => {
-        const h = (m.count / max) * chartHeight;
-        const x = i * slotWidth + 8;
-        const y = baselineY - h;
-        return (
-          <g key={m.ym}>
-            <rect
-              x={x + (slotWidth - barWidth) / 2}
-              y={y}
-              width={barWidth}
-              height={h}
-              fill={m.count > 0 ? 'var(--accent)' : 'var(--bg-3)'}
-              rx={2}
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${data.length}, 1fr)`,
+          alignItems: 'end',
+          height: PLOT_HEIGHT,
+          gap: 6,
+          paddingBottom: 4,
+          borderBottom: '1px solid var(--rule)',
+        }}
+      >
+        {data.map((m) => {
+          const h = (m.count / max) * (PLOT_HEIGHT - 18); // leave room for count label
+          return (
+            <div
+              key={m.ym}
+              title={`${m.label}: ${m.count}편`}
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'flex-end',
+                height: '100%',
+              }}
             >
-              <title>{`${m.label}: ${m.count}편`}</title>
-            </rect>
-            {m.count > 0 && (
-              <text
-                x={x + slotWidth / 2}
-                y={Math.max(y - 6, 12)}
-                textAnchor="middle"
-                fontSize="10"
-                fill="var(--text-muted)"
-              >
-                {m.count}
-              </text>
-            )}
-            <text
-              x={x + slotWidth / 2}
-              y={baselineY + 16}
-              textAnchor="middle"
-              fontSize="10"
-              fill="var(--text-muted)"
-            >
-              {m.label}
-            </text>
-          </g>
-        );
-      })}
-    </svg>
+              {m.count > 0 && (
+                <div
+                  style={{
+                    fontSize: 10,
+                    color: 'var(--text-muted)',
+                    marginBottom: 4,
+                    lineHeight: 1,
+                  }}
+                >
+                  {m.count}
+                </div>
+              )}
+              <div
+                style={{
+                  width: '100%',
+                  maxWidth: 32,
+                  height: Math.max(h, m.count > 0 ? 4 : 0),
+                  background: m.count > 0 ? 'var(--accent)' : 'var(--bg-3)',
+                  borderRadius: 2,
+                }}
+              />
+            </div>
+          );
+        })}
+      </div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: `repeat(${data.length}, 1fr)`,
+          gap: 6,
+          marginTop: 8,
+        }}
+      >
+        {data.map((m) => (
+          <div
+            key={`${m.ym}-label`}
+            style={{
+              fontSize: 11,
+              color: 'var(--text-muted)',
+              textAlign: 'center',
+            }}
+          >
+            {m.label}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
