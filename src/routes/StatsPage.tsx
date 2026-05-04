@@ -248,7 +248,13 @@ function MonthlyChart({ data }: { data: MonthlyCount[] }) {
   return (
     <svg
       viewBox={`0 0 ${totalWidth} 180`}
-      style={{ width: '100%', height: 'auto', display: 'block' }}
+      style={{
+        width: '100%',
+        maxWidth: 640,
+        height: 'auto',
+        display: 'block',
+        margin: '0 auto',
+      }}
       role="img"
       aria-label="최근 12개월 월별 시청 편수"
     >
