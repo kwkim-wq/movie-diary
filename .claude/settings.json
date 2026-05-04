@@ -1,0 +1,27 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/kwkim/Desktop/Personal/260505_영화 아카이빙/.claude/hooks/inject-issues.sh\"",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"/Users/kwkim/Desktop/Personal/260505_영화 아카이빙/.claude/hooks/post-bash-deploy.sh\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}
