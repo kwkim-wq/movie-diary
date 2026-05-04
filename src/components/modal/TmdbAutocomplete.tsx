@@ -52,11 +52,6 @@ export function TmdbAutocomplete({
     if (selectedTmdbId != null) setOpen(false);
   }, [selectedTmdbId]);
 
-  // Re-open when the user types again.
-  useEffect(() => {
-    if (value.trim() !== '') setOpen(true);
-  }, [value]);
-
   const showDropdown = open && value.trim() !== '';
   const hasAuthError = error instanceof TmdbAuthError;
 
@@ -106,7 +101,12 @@ export function TmdbAutocomplete({
         type="text"
         autoFocus
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value);
+          // Re-open dropdown only on actual user typing — programmatic value
+          // changes (after a hit is selected) must not re-open it.
+          setOpen(true);
+        }}
         onKeyDown={handleKeyDown}
         onFocus={() => setOpen(true)}
         placeholder="영화 제목 검색…"
