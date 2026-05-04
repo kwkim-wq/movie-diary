@@ -60,15 +60,18 @@ export function DetailPage() {
     [params.id],
   );
 
-  if (!hydrated) return null;
-  const entry = getEntryById(decodedId);
-  if (!entry) {
-    return <NotFoundPage />;
-  }
+  // IMPORTANT: every hook must run on every render — we can't `return null`
+  // before declaring useMemo etc. So we resolve the entry as a memoised value
+  // and let every downstream hook tolerate `entry === undefined`.
+  const entry = useMemo(
+    () => (hydrated ? getEntryById(decodedId) : undefined),
+    [hydrated, decodedId, getEntryById],
+  );
 
   // Group same-film viewings by tmdbId, fall back to title matching when the user
   // recorded a manual entry without a TMDB id.
   const sameFilm = useMemo(() => {
+    if (!entry) return [];
     if (entry.tmdbId != null) {
       return getEntriesByTmdbId(entry.tmdbId);
     }
@@ -77,23 +80,27 @@ export function DetailPage() {
     );
   }, [entry, getEntriesByTmdbId, entries]);
 
-  const previousViewings = useMemo(
-    () =>
-      sameFilm
-        .filter((e) => e.id !== entry.id)
-        .sort((a, b) => (b.watched || '').localeCompare(a.watched || '')),
-    [sameFilm, entry.id],
-  );
+  const previousViewings = useMemo(() => {
+    if (!entry) return [];
+    return sameFilm
+      .filter((e) => e.id !== entry.id)
+      .sort((a, b) => (b.watched || '').localeCompare(a.watched || ''));
+  }, [sameFilm, entry]);
 
   // Index: how many viewings (chronological) is this one?
   const viewingIndex = useMemo(() => {
+    if (!entry) return 1;
     const sorted = [...sameFilm].sort((a, b) =>
       (a.watched || '').localeCompare(b.watched || ''),
     );
     const idx = sorted.findIndex((e) => e.id === entry.id);
     return idx >= 0 ? idx + 1 : 1;
-  }, [sameFilm, entry.id]);
+  }, [sameFilm, entry]);
 
+  if (!hydrated) return null;
+  if (!entry) {
+    return <NotFoundPage />;
+  }
   const watchedDate = new Date(entry.watched);
 
   const handleEdit = () => {
@@ -276,7 +283,7 @@ export function DetailPage() {
             </div>
           </div>
 
-          {entry.genres && entry.genres.length > 0 && (
+          {(entry.genres?.length ?? 0) > 0 && (
             <div style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
               {entry.genres.map((g) => (
                 <span
@@ -297,7 +304,7 @@ export function DetailPage() {
           )}
 
           {/* Credits panel — only the fields we actually have. */}
-          {(entry.director || entry.year || entry.runtime) && (
+          {(Boolean(entry.director) || entry.year > 0 || entry.runtime > 0) && (
             <div
               style={{
                 marginTop: 32,
@@ -353,7 +360,7 @@ export function DetailPage() {
                   {entry.note}
                 </p>
               </div>
-              {entry.tags && entry.tags.length > 0 && (
+              {(entry.tags?.length ?? 0) > 0 && (
                 <div style={{ marginTop: 14, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
                   {entry.tags.map((t) => (
                     <span
@@ -376,7 +383,7 @@ export function DetailPage() {
           )}
 
           {/* Tag chips when there is no memo */}
-          {!entry.note && entry.tags && entry.tags.length > 0 && (
+          {!entry.note && (entry.tags?.length ?? 0) > 0 && (
             <div style={{ marginTop: 32, display: 'flex', flexWrap: 'wrap', gap: 8 }}>
               {entry.tags.map((t) => (
                 <span
