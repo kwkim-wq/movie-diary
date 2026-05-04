@@ -1,8 +1,8 @@
 // AppHeader — unified appbar used by both list and detail screens.
 // Inline styles copied verbatim from design-handoff/scene-list.jsx and scene-detail.jsx.
 //
-// Phase 4 will wire the nav links + search to the router/state. For now the
-// active tab and search value are passed in as props.
+// Phase 6 added: responsive nav scrolling (.nav-scroller), shrinking padding via
+// `.app-header-bar`, and a hidden "+ 새 영화 기록" label on phone widths.
 
 import type { ReactNode } from 'react';
 
@@ -57,8 +57,8 @@ export function AppHeader({
   return (
     <div style={{ borderBottom: '1px solid var(--rule)', background: 'var(--bg)' }}>
       <div
+        className="app-header-bar"
         style={{
-          padding: '20px 56px',
           minHeight: 80,
           display: 'flex',
           alignItems: 'center',
@@ -66,7 +66,15 @@ export function AppHeader({
           gap: 24,
         }}
       >
-        <div style={{ display: 'flex', alignItems: 'center', gap: 32, flexShrink: 0 }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 32,
+            minWidth: 0,
+            flex: '1 1 auto',
+          }}
+        >
           {/* Logo */}
           <div
             style={{
@@ -113,9 +121,9 @@ export function AppHeader({
             </div>
           </div>
 
-          {/* Nav */}
+          {/* Nav — scroll horizontally when the row is too narrow. */}
           {showNav && (
-            <nav style={{ display: 'flex', gap: 22, flexShrink: 0 }}>
+            <nav className="nav-scroller" aria-label="주 메뉴">
               {NAV_ITEMS.map(({ key, label }) => {
                 const active = key === activeNav;
                 return (
@@ -141,6 +149,7 @@ export function AppHeader({
                         ? '2px solid var(--accent)'
                         : '2px solid transparent',
                       whiteSpace: 'nowrap',
+                      flexShrink: 0,
                     }}
                   >
                     {label}
@@ -159,7 +168,7 @@ export function AppHeader({
         ) : (
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
             {showSearch && (
-              <div style={{ position: 'relative', width: 240 }}>
+              <div className="header-search" style={{ position: 'relative', width: 240 }}>
                 <svg
                   width="14"
                   height="14"
@@ -198,6 +207,7 @@ export function AppHeader({
               className="btn-primary"
               style={{ whiteSpace: 'nowrap', flexShrink: 0 }}
               onClick={onCreate}
+              aria-label="새 영화 기록"
             >
               <svg
                 width="14"
@@ -210,7 +220,7 @@ export function AppHeader({
               >
                 <path d="M12 5v14M5 12h14" />
               </svg>
-              새 영화 기록
+              <span className="header-create-label">새 영화 기록</span>
             </button>
           </div>
         )}

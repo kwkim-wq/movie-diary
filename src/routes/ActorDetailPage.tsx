@@ -102,7 +102,7 @@ export function ActorDetailPage() {
       />
 
       {/* Breadcrumb */}
-      <div style={{ padding: '20px 56px 0' }}>
+      <div className="page-pad" style={{ padding: '20px 56px 0' }}>
         <div
           style={{
             fontSize: 12,
@@ -133,15 +133,13 @@ export function ActorDetailPage() {
 
       {/* Hero: headshot + meta */}
       <div
+        className="actor-hero page-pad"
         style={{
           padding: '32px 56px 36px',
-          display: 'grid',
-          gridTemplateColumns: '220px 1fr',
-          gap: 40,
-          alignItems: 'flex-start',
         }}
       >
         <div
+          className="actor-headshot"
           style={{
             aspectRatio: '2/3',
             borderRadius: 'var(--radius)',
@@ -273,7 +271,7 @@ export function ActorDetailPage() {
       </div>
 
       {/* Filmography */}
-      <div style={{ padding: '0 56px 60px' }}>
+      <div className="page-pad" style={{ padding: '0 56px 60px' }}>
         <div
           style={{
             display: 'flex',
@@ -292,13 +290,7 @@ export function ActorDetailPage() {
           </div>
         </div>
 
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(5, 1fr)',
-            gap: '32px 24px',
-          }}
-        >
+        <div className="movie-grid">
           {sortedMovies.map((entry) => (
             <MovieCard
               key={entry.id}

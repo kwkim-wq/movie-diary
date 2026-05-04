@@ -222,6 +222,7 @@ export function ListPage({ filter }: ListPageProps) {
 
       {/* Hero stat bar */}
       <div
+        className="page-pad hero-stack"
         style={{
           padding: '40px 56px 28px',
           display: 'flex',
@@ -234,14 +235,14 @@ export function ListPage({ filter }: ListPageProps) {
           <div className="t-tiny" style={{ marginBottom: 10 }}>
             {headerKicker}
           </div>
-          <h1 className="t-h1" style={{ margin: 0, fontSize: 36 }}>
+          <h1 className="t-h1 hero-title" style={{ margin: 0, fontSize: 36 }}>
             {headerTitle}
           </h1>
           <div style={{ marginTop: 8, fontSize: 14, color: 'var(--text-muted)' }}>
             {headerSubtitle}
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 48, paddingBottom: 4 }}>
+        <div className="hero-stats" style={{ display: 'flex', gap: 48, paddingBottom: 4, flexWrap: 'wrap' }}>
           <StatBlock value={totalCount} label="총 기록" />
           <StatBlock value={thisYear} label={`${new Date().getFullYear()}년`} />
           <StatBlock
@@ -261,11 +262,14 @@ export function ListPage({ filter }: ListPageProps) {
 
       {/* Filter bar */}
       <div
+        className="page-pad"
         style={{
           padding: '0 56px 24px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          gap: 12,
+          flexWrap: 'wrap',
           borderBottom: '1px solid var(--rule)',
         }}
       >
@@ -355,7 +359,7 @@ export function ListPage({ filter }: ListPageProps) {
       </div>
 
       {/* Grid / list body */}
-      <div style={{ padding: '36px 56px 60px' }}>
+      <div className="page-pad" style={{ padding: '36px 56px 60px' }}>
         {visible.length === 0 ? (
           <div
             style={{
@@ -368,13 +372,7 @@ export function ListPage({ filter }: ListPageProps) {
             검색 결과가 없습니다.
           </div>
         ) : view === 'grid' ? (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(5, 1fr)',
-              gap: '32px 24px',
-            }}
-          >
+          <div className="movie-grid">
             {visible.map((entry) => (
               <MovieCard
                 key={entry.id}

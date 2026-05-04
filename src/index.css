@@ -137,3 +137,113 @@ textarea.input { resize: none; line-height: 1.6; }
 
 /* Scene container */
 .scene { position: relative; overflow: hidden; background: var(--bg); width: 100%; height: 100%; }
+
+/* ─── Responsive — Phase 6 ───────────────────────────────────────── */
+/* Movie poster grids scale 5/4/3/2/2 across the breakpoints in handoff §5.1. */
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 32px 24px;
+}
+@media (max-width: 1279px) { .movie-grid { grid-template-columns: repeat(4, 1fr); gap: 28px 22px; } }
+@media (max-width: 1023px) { .movie-grid { grid-template-columns: repeat(3, 1fr); gap: 24px 20px; } }
+@media (max-width: 767px)  { .movie-grid { grid-template-columns: repeat(2, 1fr); gap: 20px 14px; } }
+
+/* Cast grid (DetailPage) — auto-fill so it can also grow tall on big screens. */
+.cast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 14px;
+}
+@media (max-width: 767px) {
+  .cast-grid {
+    grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+    gap: 12px;
+  }
+}
+
+/* Liked-actors grid (ActorsPage). */
+.actor-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 18px;
+}
+@media (max-width: 767px) {
+  .actor-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 14px;
+  }
+}
+
+/* DetailPage hero — 2-col → stacked under 768px. */
+.detail-hero {
+  display: grid;
+  grid-template-columns: 380px 1fr;
+  gap: 56px;
+}
+@media (max-width: 767px) {
+  .detail-hero { grid-template-columns: 1fr; gap: 24px; }
+  .detail-hero .detail-poster { max-width: 280px; margin: 0 auto; width: 100%; }
+}
+
+/* ActorDetailPage hero — same idea, narrower headshot. */
+.actor-hero {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 40px;
+  align-items: flex-start;
+}
+@media (max-width: 767px) {
+  .actor-hero { grid-template-columns: 1fr; gap: 20px; }
+  .actor-hero .actor-headshot { max-width: 200px; margin: 0 auto; width: 100%; }
+}
+
+/* Header nav — horizontal scroll on narrow widths instead of wrapping. */
+.nav-scroller {
+  display: flex;
+  gap: 22px;
+  flex-shrink: 1;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.nav-scroller::-webkit-scrollbar { display: none; height: 0; }
+
+/* Header padding shrinks on narrow widths. */
+.app-header-bar { padding: 20px 56px; }
+@media (max-width: 1023px) { .app-header-bar { padding: 18px 32px; } }
+@media (max-width: 767px)  { .app-header-bar { padding: 16px 20px; gap: 12px; } }
+@media (max-width: 480px)  {
+  .app-header-bar .header-search { width: 160px; }
+  .app-header-bar .header-create-label { display: none; }
+}
+
+/* Page-level horizontal padding helpers (mirror handoff scene-list spacing).
+ * Inline styles use the same 56px so non-responsive code keeps working.
+ * !important is used here only to win over the shorthand `padding:` declarations
+ * still in the components — the alternative is to refactor every padding rule. */
+.page-pad { padding-left: 56px; padding-right: 56px; }
+@media (max-width: 1023px) { .page-pad { padding-left: 32px !important; padding-right: 32px !important; } }
+@media (max-width: 767px)  { .page-pad { padding-left: 20px !important; padding-right: 20px !important; } }
+
+/* Hero h1 — readable scale on phone. */
+@media (max-width: 767px) {
+  .hero-title { font-size: 28px !important; }
+  .hero-stat-value { font-size: 22px !important; }
+  .hero-stack { flex-direction: column; align-items: flex-start !important; gap: 20px !important; }
+  .hero-stack .hero-stats { gap: 24px !important; }
+}
+
+/* Mobile: full-screen modal. */
+@media (max-width: 480px) {
+  .movie-modal {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    border: none !important;
+    top: 0 !important;
+    left: 0 !important;
+    transform: none !important;
+  }
+}

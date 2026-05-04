@@ -93,6 +93,7 @@ export function ActorsPage() {
 
       {/* Hero */}
       <div
+        className="page-pad hero-stack"
         style={{
           padding: '40px 56px 28px',
           display: 'flex',
@@ -105,20 +106,21 @@ export function ActorsPage() {
           <div className="t-tiny" style={{ marginBottom: 10 }}>
             FAVORITE CAST
           </div>
-          <h1 className="t-h1" style={{ margin: 0, fontSize: 36 }}>
+          <h1 className="t-h1 hero-title" style={{ margin: 0, fontSize: 36 }}>
             좋아한 배우
           </h1>
           <div style={{ marginTop: 8, fontSize: 14, color: 'var(--text-muted)' }}>
             영화 상세에서 ❤를 누른 배우만 모여있어요
           </div>
         </div>
-        <div style={{ display: 'flex', gap: 48, paddingBottom: 4 }}>
+        <div className="hero-stats" style={{ display: 'flex', gap: 48, paddingBottom: 4 }}>
           <Stat value={likedCount} label="좋아한 배우" />
         </div>
       </div>
 
       {/* Toolbar — sort buttons + search */}
       <div
+        className="page-pad"
         style={{
           padding: '0 56px 24px',
           display: 'flex',
@@ -192,7 +194,7 @@ export function ActorsPage() {
       </div>
 
       {/* Body */}
-      <div style={{ padding: '36px 56px 60px' }}>
+      <div className="page-pad" style={{ padding: '36px 56px 60px' }}>
         {isEmpty ? (
           <ActorsEmpty onCta={() => navigate({ search: '?modal=new' })} />
         ) : visible.length === 0 ? (
@@ -207,13 +209,7 @@ export function ActorsPage() {
             검색 결과가 없습니다.
           </div>
         ) : (
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))',
-              gap: 18,
-            }}
-          >
+          <div className="actor-grid">
             {visible.map((a) => (
               <CastCard
                 key={a.id}

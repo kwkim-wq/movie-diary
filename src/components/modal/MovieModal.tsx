@@ -380,6 +380,7 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
       />
 
       <div
+        className="movie-modal"
         onClick={(e) => e.stopPropagation()}
         style={{
           position: 'absolute',

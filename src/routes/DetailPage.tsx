@@ -175,7 +175,7 @@ export function DetailPage() {
       />
 
       {/* Breadcrumb */}
-      <div style={{ padding: '20px 56px 0' }}>
+      <div className="page-pad" style={{ padding: '20px 56px 0' }}>
         <div
           style={{
             fontSize: 12,
@@ -208,14 +208,12 @@ export function DetailPage() {
 
       {/* Hero: 380px poster + meta column */}
       <div
+        className="detail-hero page-pad"
         style={{
           padding: '32px 56px 48px',
-          display: 'grid',
-          gridTemplateColumns: '380px 1fr',
-          gap: 56,
         }}
       >
-        <div>
+        <div className="detail-poster">
           <div
             style={{
               borderRadius: 'var(--radius)',
@@ -450,13 +448,7 @@ export function DetailPage() {
                   {entry.cast.length}명 · 좋았던 배우는 ❤️ 표시
                 </div>
               </div>
-              <div
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
-                  gap: 14,
-                }}
-              >
+              <div className="cast-grid">
                 {entry.cast.map((member) => (
                   <CastCard
                     key={`${entry.id}:${member.id}`}
