@@ -20,8 +20,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDraft } from '../../hooks/useDraft';
 import { useMovies } from '../../hooks/useMovies';
 import { entryId } from '../../lib/id';
-import { getMovieDetails } from '../../lib/tmdb';
-import type { MovieDraft, MovieEntry, TmdbSearchResult } from '../../types';
+import { getMovieCredits, getMovieDetails } from '../../lib/tmdb';
+import type { CastMember, MovieDraft, MovieEntry, TmdbSearchResult } from '../../types';
 import { StarInput } from './StarInput';
 import { TagInput } from './TagInput';
 import { TmdbAutocomplete } from './TmdbAutocomplete';
@@ -52,6 +52,7 @@ function emptyDraft(): MovieDraft {
     note: '',
     tags: [],
     liked: false,
+    cast: [],
     savedAt: '',
   };
 }
@@ -72,8 +73,20 @@ function entryToDraft(e: MovieEntry): MovieDraft {
     note: e.note,
     tags: e.tags ?? [],
     liked: e.liked,
+    cast: Array.isArray(e.cast) ? e.cast : [],
     savedAt: '',
   };
+}
+
+/**
+ * Merge a freshly-fetched cast list with whatever the entry already had — we
+ * never want to clobber the user's per-actor heart toggles when they re-edit
+ * an entry, even if TMDB returned a slightly different roster.
+ */
+function mergeCastLiked(next: CastMember[], previous: CastMember[]): CastMember[] {
+  if (!previous || previous.length === 0) return next;
+  const likedIds = new Set(previous.filter((c) => c.liked).map((c) => c.id));
+  return next.map((c) => (likedIds.has(c.id) ? { ...c, liked: true } : c));
 }
 
 function draftsAreEqual(a: MovieDraft, b: MovieDraft): boolean {
@@ -90,6 +103,10 @@ function draftsAreEqual(a: MovieDraft, b: MovieDraft): boolean {
   if (a.liked !== b.liked) return false;
   if ((a.genres || []).join('|') !== (b.genres || []).join('|')) return false;
   if ((a.tags || []).join('|') !== (b.tags || []).join('|')) return false;
+  // Cast is "dirty" if the actor set OR any heart flag differs.
+  const aCast = (a.cast || []).map((c) => `${c.id}:${c.liked ? 1 : 0}`).join('|');
+  const bCast = (b.cast || []).map((c) => `${c.id}:${c.liked ? 1 : 0}`).join('|');
+  if (aCast !== bCast) return false;
   return true;
 }
 
@@ -215,6 +232,10 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
         note: draft.note,
         tags: draft.tags,
         liked: draft.liked,
+        // Preserve any per-actor likes the user already toggled on the detail
+        // page: re-merge the existing cast's liked flags into whatever cast we
+        // have in the draft (keyed by TMDB person id).
+        cast: mergeCastLiked(draft.cast, editTarget.cast),
       };
       dispatch({ type: 'updateEntry', payload: { id: editTarget.id, patch: patchPayload } });
       // Stay on the same detail page — strip params only.
@@ -246,6 +267,7 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
       note: draft.note,
       tags: draft.tags,
       liked: draft.liked,
+      cast: draft.cast,
       createdAt: now,
       updatedAt: now,
     };
@@ -290,6 +312,8 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
       year: hit.year,
       posterPath: hit.posterPath,
       genres: hit.genres,
+      // Reset cast on any new pick — the credits fetch below repopulates.
+      cast: [],
     });
     if (settings.tmdbKey) {
       // Fire-and-forget detail fetch for runtime + director.
@@ -305,6 +329,26 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
         .catch((err) => {
           // Detail enrichment is optional — the user can still save.
           console.warn('[tmdb] getMovieDetails failed', err);
+        });
+      // Cast prefill — silent on failure so the modal never breaks the save flow.
+      getMovieCredits(hit.id, settings.tmdbKey, { topN: 8 })
+        .then(({ cast }) => {
+          const prefilled: CastMember[] = cast.map((c) => ({
+            id: c.id,
+            name: c.name,
+            character: c.character,
+            profilePath: c.profilePath,
+            liked: false,
+          }));
+          // Merge with whatever the user already had in this draft (edit mode)
+          // so we don't clobber per-actor hearts on re-pick of the same movie.
+          setDraft((d) => ({
+            ...d,
+            cast: mergeCastLiked(prefilled, d.cast),
+          }));
+        })
+        .catch((err) => {
+          console.warn('[tmdb] getMovieCredits failed', err);
         });
     }
   };
