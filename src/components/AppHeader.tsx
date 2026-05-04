@@ -85,20 +85,20 @@ export function AppHeader({
               }
             }}
           >
-            <div
-              style={{
-                width: 22,
-                height: 22,
-                borderRadius: 4,
-                background: 'var(--accent)',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-              }}
+            <svg
+              width="22"
+              height="22"
+              viewBox="0 0 1024 1024"
+              style={{ flexShrink: 0, display: 'block' }}
+              aria-hidden="true"
             >
-              <div style={{ width: 8, height: 8, borderRadius: '50%', background: 'var(--bg)' }} />
-            </div>
+              <rect width="1024" height="1024" rx="224" ry="224" fill="var(--bg)" />
+              <path
+                d="M512 168 L613 386 L848 416 L675 580 L719 814 L512 700 L305 814 L349 580 L176 416 L411 386 Z"
+                fill="var(--accent)"
+              />
+              <path d="M452 432 L452 624 L612 528 Z" fill="var(--bg)" />
+            </svg>
             <div
               style={{
                 fontSize: 16,
