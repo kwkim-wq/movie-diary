@@ -56,6 +56,8 @@ export function TmdbAutocomplete({
   const hasAuthError = error instanceof TmdbAuthError;
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Don't react to Enter / arrows that are actually IME composition signals.
+    if (e.nativeEvent.isComposing || e.keyCode === 229) return;
     if (!showDropdown) return;
     if (e.key === 'ArrowDown') {
       e.preventDefault();

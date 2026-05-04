@@ -32,6 +32,11 @@ export function TagInput({
   const [draft, setDraft] = useState('');
   const [shake, setShake] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  // Track Korean/Japanese/Chinese IME composition. Enter that finalises the
+  // composition fires a keydown with isComposing=true *before* the regular
+  // Enter — without this guard a single Enter both commits the partial draft
+  // and then the IME-finalised tail re-enters as a second tag.
+  const composingRef = useRef(false);
 
   const triggerShake = () => {
     setShake(true);
@@ -57,6 +62,11 @@ export function TagInput({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // Skip while IME composition is active — the Enter that ends composition
+    // must not commit the tag (user presses Enter again to commit).
+    if (composingRef.current || e.nativeEvent.isComposing || e.keyCode === 229) {
+      return;
+    }
     if (e.key === 'Enter' || e.key === ',') {
       e.preventDefault();
       commit();
@@ -125,6 +135,12 @@ export function TagInput({
         value={draft}
         onChange={(e) => setDraft(e.target.value)}
         onKeyDown={handleKeyDown}
+        onCompositionStart={() => {
+          composingRef.current = true;
+        }}
+        onCompositionEnd={() => {
+          composingRef.current = false;
+        }}
         onBlur={commit}
         placeholder={value.length === 0 ? placeholder : ''}
         style={{
