@@ -422,7 +422,7 @@ function ListBody({
           }}
           style={{
             display: 'grid',
-            gridTemplateColumns: '40px 110px 1fr 140px 100px',
+            gridTemplateColumns: '110px 1fr 140px 100px',
             alignItems: 'center',
             gap: 18,
             padding: '14px 0',
@@ -430,35 +430,37 @@ function ListBody({
             cursor: 'pointer',
           }}
         >
-          <div
-            style={{
-              width: 40,
-              aspectRatio: '2/3',
-              borderRadius: 3,
-              overflow: 'hidden',
-              flexShrink: 0,
-              background: 'var(--bg-2)',
-            }}
-          >
-            <Poster
-              posterPath={entry.posterPath}
-              posterKind={entry.posterKind}
-              title={entry.title}
-              size="card"
-            />
-          </div>
           <div style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500 }}>
             {fmt.format(new Date(entry.watched))}
           </div>
-          <div>
-            <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>
-              {entry.title}{' '}
-              <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: 12 }}>
-                · {entry.originalTitle}
-              </span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
+            <div
+              style={{
+                width: 40,
+                aspectRatio: '2/3',
+                borderRadius: 3,
+                overflow: 'hidden',
+                flexShrink: 0,
+                background: 'var(--bg-2)',
+              }}
+            >
+              <Poster
+                posterPath={entry.posterPath}
+                posterKind={entry.posterKind}
+                title={entry.title}
+                size="card"
+              />
             </div>
-            <div style={{ marginTop: 4, fontSize: 12, color: 'var(--text-muted)' }}>
-              {entry.year} · {entry.director}
+            <div style={{ minWidth: 0 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>
+                {entry.title}{' '}
+                <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: 12 }}>
+                  · {entry.originalTitle}
+                </span>
+              </div>
+              <div style={{ marginTop: 4, fontSize: 12, color: 'var(--text-muted)' }}>
+                {entry.year} · {entry.director}
+              </div>
             </div>
           </div>
           <Stars rating={entry.rating} pixelSize={13} gap={1} />
