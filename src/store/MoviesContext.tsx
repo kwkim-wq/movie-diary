@@ -17,6 +17,8 @@ export type MoviesAction =
   | { type: 'deleteEntry'; payload: { id: string } }
   /** Toggle the `liked` flag. */
   | { type: 'toggleLike'; payload: { id: string } }
+  /** Toggle a single cast member's `liked` flag inside one entry. */
+  | { type: 'toggleCastLike'; payload: { entryId: string; castId: number } }
   /** Patch one settings key. */
   | { type: 'setSetting'; payload: { key: keyof Settings; value: Settings[keyof Settings] } }
   /** Replace the entire state (used by JSON import). */
@@ -56,6 +58,21 @@ function reducer(state: AppState, action: MoviesAction): AppState {
         entries: state.entries.map((e) =>
           e.id === action.payload.id ? { ...e, liked: !e.liked, updatedAt: now } : e,
         ),
+      };
+    }
+
+    case 'toggleCastLike': {
+      const { entryId: targetId, castId } = action.payload;
+      const now = new Date().toISOString();
+      return {
+        ...state,
+        entries: state.entries.map((e) => {
+          if (e.id !== targetId) return e;
+          const cast = (e.cast || []).map((c) =>
+            c.id === castId ? { ...c, liked: !c.liked } : c,
+          );
+          return { ...e, cast, updatedAt: now };
+        }),
       };
     }
 

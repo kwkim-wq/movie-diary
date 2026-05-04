@@ -5,6 +5,7 @@
 import { useMemo } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { AppHeader } from '../components/AppHeader';
+import { CastCard } from '../components/CastCard';
 import { Poster } from '../components/Poster';
 import { Stars } from '../components/Stars';
 import { useMovies } from '../hooks/useMovies';
@@ -52,7 +53,14 @@ export function DetailPage() {
   const navigate = useNavigate();
   const params = useParams<{ id: string }>();
   const [, setSearchParams] = useSearchParams();
-  const { hydrated, getEntryById, getEntriesByTmdbId, dispatch, entries } = useMovies();
+  const {
+    hydrated,
+    getEntryById,
+    getEntriesByTmdbId,
+    dispatch,
+    entries,
+    toggleCastLike,
+  } = useMovies();
 
   // Decode the URL-encoded id (it carries Korean + slashes-as-dashes from entryId()).
   const decodedId = useMemo(
@@ -400,6 +408,47 @@ export function DetailPage() {
                   {t}
                 </span>
               ))}
+            </div>
+          )}
+
+          {/* Cast — only when TMDB credits gave us at least one row. */}
+          {(entry.cast?.length ?? 0) > 0 && (
+            <div style={{ marginTop: 40 }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  marginBottom: 14,
+                }}
+              >
+                <h2 className="t-h2" style={{ margin: 0 }}>
+                  배우
+                </h2>
+                <div style={{ fontSize: 12, color: 'var(--text-faint)' }}>
+                  {entry.cast.length}명 · 좋았던 배우는 ❤️ 표시
+                </div>
+              </div>
+              <div
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+                  gap: 14,
+                }}
+              >
+                {entry.cast.map((member) => (
+                  <CastCard
+                    key={`${entry.id}:${member.id}`}
+                    id={member.id}
+                    name={member.name}
+                    subtitle={member.character ? `as ${member.character}` : undefined}
+                    profilePath={member.profilePath}
+                    liked={member.liked}
+                    onToggleLike={() => toggleCastLike(entry.id, member.id)}
+                    onClick={() => navigate(`/actor/${member.id}`)}
+                  />
+                ))}
+              </div>
             </div>
           )}
 
