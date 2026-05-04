@@ -59,6 +59,7 @@ export function AppHeader({
       <div
         style={{
           padding: '20px 56px',
+          minHeight: 80,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
