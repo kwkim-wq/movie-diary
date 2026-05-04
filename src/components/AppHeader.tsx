@@ -45,7 +45,7 @@ export interface AppHeaderProps {
 
 export function AppHeader({
   showNav = true,
-  activeNav = 'all',
+  activeNav,
   showSearch = true,
   searchValue = '',
   onSearchChange,

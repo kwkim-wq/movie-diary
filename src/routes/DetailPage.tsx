@@ -4,7 +4,7 @@
 
 import { useMemo } from 'react';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { AppHeader } from '../components/AppHeader';
+import { AppHeader, type NavKey } from '../components/AppHeader';
 import { CastCard } from '../components/CastCard';
 import { Poster } from '../components/Poster';
 import { Stars } from '../components/Stars';
@@ -133,9 +133,30 @@ export function DetailPage() {
   return (
     <div className="scene app-root" style={{ minHeight: '100vh' }}>
       <AppHeader
-        showNav={false}
         showSearch={false}
         onBrandClick={() => navigate('/')}
+        onNavClick={(key: NavKey) => {
+          switch (key) {
+            case 'all':
+              navigate('/');
+              break;
+            case 'year':
+              navigate('/year/2026');
+              break;
+            case 'liked':
+              navigate('/liked');
+              break;
+            case 'lists':
+              navigate('/lists');
+              break;
+            case 'actors':
+              navigate('/actors');
+              break;
+            case 'stats':
+              navigate('/stats');
+              break;
+          }
+        }}
         rightSlot={
           <>
             <button type="button" className="btn-ghost" onClick={handleEdit}>
