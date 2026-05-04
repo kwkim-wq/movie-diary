@@ -28,6 +28,9 @@ export function PlaceholderPage({ label, activeNav }: PlaceholderPageProps) {
       case 'lists':
         navigate('/lists');
         break;
+      case 'actors':
+        navigate('/actors');
+        break;
       case 'stats':
         navigate('/stats');
         break;

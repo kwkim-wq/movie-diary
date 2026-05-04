@@ -6,7 +6,7 @@
 
 import type { ReactNode } from 'react';
 
-export type NavKey = 'all' | 'year' | 'liked' | 'lists' | 'stats';
+export type NavKey = 'all' | 'year' | 'liked' | 'lists' | 'actors' | 'stats';
 
 interface NavItem {
   key: NavKey;
@@ -18,6 +18,7 @@ const NAV_ITEMS: NavItem[] = [
   { key: 'year', label: '2026' },
   { key: 'liked', label: '좋아요' },
   { key: 'lists', label: '리스트' },
+  { key: 'actors', label: '배우' },
   { key: 'stats', label: '통계' },
 ];
 

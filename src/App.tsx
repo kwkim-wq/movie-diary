@@ -3,6 +3,8 @@
 //   /year/:year           → ListPage (filter="year")
 //   /liked                → ListPage (filter="liked")
 //   /lists                → PlaceholderPage ("리스트 — 준비 중")
+//   /actors               → ActorsPage
+//   /actor/:id            → ActorDetailPage
 //   /stats                → PlaceholderPage ("통계 — 준비 중")
 //   /entry/:id            → DetailPage
 //   *                     → NotFoundPage
@@ -13,6 +15,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { MovieModal } from './components/modal/MovieModal';
 import { TmdbKeyOnboarding } from './components/modal/TmdbKeyOnboarding';
+import { ActorDetailPage } from './routes/ActorDetailPage';
+import { ActorsPage } from './routes/ActorsPage';
 import { DetailPage } from './routes/DetailPage';
 import { ListPage } from './routes/ListPage';
 import { NotFoundPage } from './routes/NotFoundPage';
@@ -33,6 +37,8 @@ function App() {
             path="/lists"
             element={<PlaceholderPage label="리스트 — 준비 중" activeNav="lists" />}
           />
+          <Route path="/actors" element={<ActorsPage />} />
+          <Route path="/actor/:id" element={<ActorDetailPage />} />
           <Route
             path="/stats"
             element={<PlaceholderPage label="통계 — 준비 중" activeNav="stats" />}
