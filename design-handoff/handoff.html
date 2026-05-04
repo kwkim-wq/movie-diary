@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<style data-omelette-injected>html,body{background:transparent}</style><script data-omelette-injected>(()=>{var j=["https://claude.ai","https://preview.claude.ai","https://eap-omelette.claude.ai"];var x=true;var S=30000;var f=3000;document.addEventListener("DOMContentLoaded",()=>{const H=window.Babel;const G="om-src-id";if(H&&H.registerPlugin&&!(H.availablePlugins&&H.availablePlugins[G])){H.registerPlugin(G,({types:Y})=>({visitor:{JSXOpeningElement(U,Q){const J=U.node;if(J.name&&J.name.type==="JSXMemberExpression")return;for(let V=0;V<J.attributes.length;V++){const L=J.attributes[V];if(L.type==="JSXAttribute"&&L.name&&L.name.name==="data-om-id")return}const W=Q.file&&Q.file.opts&&Q.file.opts.filename||"?";const Z=J.loc&&J.loc.start;const z=`jsx:${W}:${J.start??0}:${Z?Z.line:0}:${Z?Z.column+1:0}`;J.attributes.push(Y.jsxAttribute(Y.jsxIdentifier("data-om-id"),Y.stringLiteral(z)))}}}))}const k="om-text-extract";let A=false;if(x&&H&&H.registerPlugin&&!(H.availablePlugins&&H.availablePlugins[k])){const Y=window.React;if(Y&&Y.useSyncExternalStore&&Y.createElement){A=true;const U={};const Q=new Set;let J=0;window.__omTextO=U;window.__omTextSet=(z)=>{for(const V in z){const L=z[V];if(L==null)delete U[V];else U[V]=L}J++;Q.forEach((V)=>V())};const W=(z)=>{Q.add(z);return()=>Q.delete(z)};const Z=()=>J;window.__OmT=function z(V){Y.useSyncExternalStore(W,Z,Z);return Y.createElement("span",{"data-om-text":V.i,className:"__om-t"},V.i in U?U[V.i]:V.children)};H.registerPlugin(k,({types:z})=>{const V={style:1,script:1,noscript:1,textarea:1,title:1,option:1,text:1,tspan:1,textPath:1};const L={placeholder:1,alt:1,title:1,label:1,"aria-label":1,"aria-description":1,"aria-placeholder":1};const _=($,C)=>z.logicalExpression("??",z.memberExpression(z.logicalExpression("||",z.memberExpression(z.identifier("window"),z.identifier("__omTextO")),z.objectExpression([])),z.stringLiteral($),true),C);const E=($)=>$.file&&$.file.opts&&$.file.opts.filename||"?";const B=($)=>$.file&&$.file.code||"";const b=($,C)=>{const X=(F)=>F&&F.start!=null&&F.end!=null&&(F.type==="StringLiteral"||F.type==="TemplateLiteral"&&F.expressions.length===0)?[F.start,F.end]:null;const N=X(C);if(N)return N;if(C&&C.type==="Identifier"){const F=$.scope.getBinding(C.name);if(F&&F.constant&&F.path.node.type==="VariableDeclarator"){return X(F.path.node.init)}}return null};const m=($,C,X)=>{const N=$.node;let F=false;const w=(K,q)=>{F=true;return z.jsxElement(z.jsxOpeningElement(z.jsxIdentifier("__OmT"),[z.jsxAttribute(z.jsxIdentifier("i"),z.stringLiteral(K))],false),z.jsxClosingElement(z.jsxIdentifier("__OmT")),[q],false)};const D=N.children.map((K)=>{if(K.type==="JSXText"){if(K.start==null||K.end==null)return K;const q=X.slice(K.start,K.end);const M=q.length-q.trimStart().length;const R=q.length-q.trimEnd().length;if(M+R>=q.length)return K;return w(`txt:${C}:${K.start+M}:${K.end-R}`,K)}if(K.type==="JSXExpressionContainer"){const q=b($,K.expression);if(q)return w(`str:${C}:${q[0]}:${q[1]}`,K)}return K});if(F)N.children=D};return{visitor:{JSXOpeningElement($,C){const X=$.node;const N=E(C);const F={};for(let w=0;w<X.attributes.length;w++){const D=X.attributes[w];if(D.type!=="JSXAttribute"||!D.name)continue;const K=D.name.name;if(!L[K])continue;if(!D.value||D.value.type!=="StringLiteral")continue;if(D.value.start==null||D.value.end==null)continue;const q=`txt:${N}:${D.value.start}:${D.value.end}`;F[K]=q;D.value=z.jsxExpressionContainer(_(q,z.stringLiteral(D.value.value)))}if(Object.keys(F).length){X.attributes.push(z.jsxAttribute(z.jsxIdentifier("data-om-text-attrs"),z.stringLiteral(JSON.stringify(F))))}},JSXElement($,C){const X=$.node.openingElement;const N=X&&X.name&&X.name.name;if(N==="__OmT")return;if(typeof N==="string"&&V[N])return;m($,E(C),B(C))},JSXFragment($,C){m($,E(C),B(C))}}}})}}const u=A?["transform-react-jsx-source",G,k]:["transform-react-jsx-source",G];document.querySelectorAll('script[type="text/babel"],script[type="text/jsx"]').forEach((Y,U)=>{const Q=Y.getAttribute("data-plugins")||"";const J=u.filter((W)=>Q.indexOf(W)<0);if(J.length){Y.setAttribute("data-plugins",Q?`${Q},${J.join(",")}`:J.join(","))}if(!Y.hasAttribute("data-filename")){Y.setAttribute("data-filename",Y.getAttribute("src")||`inline-${U}`)}})});var y=window.parent;if(y&&y!==window){const H=(Q,J)=>{try{y.postMessage({__omelette_log:true,type:Q,data:J},"*")}catch{}};["log","warn","error"].forEach((Q)=>{const J=console[Q];console[Q]=(...W)=>{const Z=W.map((z)=>{try{return typeof z==="object"?JSON.stringify(z):String(z)}catch{try{return String(z)}catch{return"[unstringifiable]"}}}).join(" ");H(Q,Z);J.apply(console,W)}});window.addEventListener("error",(Q)=>{const J=Q.target;if(J&&J!==window&&J.tagName){const W=J.src||J.href||"";H("resource_error",`${J.tagName} failed to load: ${W}`)}else{H("error",`${Q.message||"Unknown error"} at ${Q.filename||"?"}:${Q.lineno||0}:${Q.colno||0}`)}},true);window.addEventListener("unhandledrejection",(Q)=>{const J=Q.reason;const W=J instanceof Error?`${J.message} ${J.stack}`:String(J);H("error",`Unhandled rejection: ${W}`)});const G=()=>{try{y.postMessage({type:"omelette:height",height:document.documentElement.scrollHeight},"*")}catch{}};if(document.readyState==="complete")G();else window.addEventListener("load",G);if(window.ResizeObserver)new ResizeObserver(G).observe(document.documentElement);const k={};let A=0;window.claude={complete(Q){return new Promise((J,W)=>{if(!j.length){W(new Error("claude.complete: no parent origin"));return}const Z=`c${++A}`;const z=()=>setTimeout(()=>{delete k[Z];W(new Error(`claude.complete: no data for ${S/1000}s`))},S);const V=z();k[Z]={resolve:J,reject:W,text:"",t:V,arm:z};try{for(const L of j){y.postMessage({__om_api:true,id:Z,body:Q},L)}}catch(L){clearTimeout(V);delete k[Z];W(L)}})}};const u={};let Y=0;window.omelette={writeFile:(Q,J)=>new Promise((W,Z)=>{if(!j.length){W();return}const z=`f${++Y}`;const V=setTimeout(()=>{delete u[z];W()},f);u[z]={resolve:W,reject:Z,t:V};try{for(const L of j){y.postMessage({__om_file:true,id:z,op:"write",path:Q,content:J},L)}}catch{clearTimeout(V);delete u[z];W()}})};const U=(Q)=>{try{return JSON.stringify(Q)}catch{return JSON.stringify(String(Q))}};window.addEventListener("message",(Q)=>{if(j.indexOf(Q.origin)<0)return;if(Q.source!==y)return;const J=Q.data;if(!J)return;if(J.__om_file_r){const z=u[J.id];if(!z)return;clearTimeout(z.t);delete u[J.id];if(J.ok)z.resolve();else z.reject(new Error(J.error||"write failed"));return}if(J.__om_api_r){const z=k[J.id];if(!z)return;if(J.error!=null){clearTimeout(z.t);delete k[J.id];z.reject(new Error(J.error));return}if(J.chunk!=null){clearTimeout(z.t);z.t=z.arm();z.text+=J.chunk;return}if(J.done){clearTimeout(z.t);delete k[J.id];z.resolve(J.text!=null?J.text:z.text);return}return}if(!J.__om_eval)return;const W=J;const Z=(z)=>{Q.source.postMessage({...z,__om_eval_r:1,id:W.id},Q.origin)};try{const z=(0,eval)(W.code);if(z&&typeof z.then==="function"){z.then((V)=>Z({ok:1,v:U(V)}),(V)=>Z({ok:0,e:String(V)}))}else{Z({ok:1,v:U(z)})}}catch(z){Z({ok:0,e:String(z)})}})}})();
+</script>
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Movie Diary — 단일 핸드오프 파일</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+/* ─────────────────────────────────────────────────────────────────
+   DESIGN TOKENS — 디자인 토큰 (Claude Code: 이 :root만 그대로 가져가면 됨)
+   ───────────────────────────────────────────────────────────────── */
+:root {
+  /* Surface / 배경 — 다크 4단 */
+  --bg:           #14181C;   /* page background — Letterboxd-ish charcoal */
+  --bg-2:         #1F2937;   /* card / panel surface */
+  --bg-3:         #2C3440;   /* input / hover surface */
+  --bg-hover:     #384250;   /* hover/focus state */
+
+  /* Text — 3단 위계 */
+  --text:         #E5E7EB;   /* primary */
+  --text-muted:   #9CA3AF;   /* secondary, meta */
+  --text-faint:   #6B7280;   /* tertiary, helpers */
+
+  /* Rules / Borders */
+  --rule:         #2C3440;
+  --rule-strong:  #384250;
+
+  /* Accent — 단 하나의 색만 사용. 별점/CTA/태그/포커스 모두 이 색 */
+  --accent:       #62D26F;
+  --accent-2:     #4FB55C;   /* hover */
+  --accent-soft:  rgba(98, 210, 111, 0.10);   /* tag / focus bg */
+
+  /* Radius */
+  --radius:       6px;
+  --radius-sm:    4px;
+  --radius-pill:  999px;
+
+  /* Shadow */
+  --shadow-card:  0 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-modal: 0 30px 80px rgba(0, 0, 0, 0.6);
+  --shadow-popover: 0 16px 40px rgba(0, 0, 0, 0.5);
+
+  /* Spacing scale (4px base) — 본문에서는 px 직접 사용도 OK */
+  --s-1: 4px; --s-2: 8px; --s-3: 12px; --s-4: 16px; --s-5: 20px;
+  --s-6: 24px; --s-8: 32px; --s-10: 40px; --s-12: 48px; --s-14: 56px;
+
+  /* Container padding */
+  --gutter-x: 56px;
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); }
+body {
+  font-family: 'Pretendard', 'Inter', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   TYPE SCALE — 타이포 스케일
+   ───────────────────────────────────────────────────────────────── */
+.t-display { font-size: 44px; font-weight: 700; line-height: 1.1;  letter-spacing: -0.025em; }
+.t-h1      { font-size: 36px; font-weight: 700; line-height: 1.2;  letter-spacing: -0.02em; }
+.t-h2      { font-size: 22px; font-weight: 600; line-height: 1.3;  letter-spacing: -0.01em; }
+.t-h3      { font-size: 16px; font-weight: 600; line-height: 1.4;  letter-spacing: -0.005em; }
+.t-body-lg { font-size: 15px; font-weight: 400; line-height: 1.65; }
+.t-body    { font-size: 14px; font-weight: 400; line-height: 1.6;  }
+.t-meta    { font-size: 12px; font-weight: 500; color: var(--text-muted); }
+.t-tiny    { font-size: 11px; font-weight: 500; letter-spacing: 0.04em;
+             text-transform: uppercase; color: var(--text-muted); }
+
+/* ─────────────────────────────────────────────────────────────────
+   PRIMITIVES — 버튼 / 입력 / 카드
+   ───────────────────────────────────────────────────────────────── */
+.btn-primary {
+  background: var(--accent); color: #0F1216; border: none;
+  padding: 10px 18px; font: 600 13px/1 inherit; cursor: pointer;
+  border-radius: var(--radius-sm);
+  display: inline-flex; align-items: center; gap: 6px;
+  transition: background .12s, transform .04s;
+  white-space: nowrap;
+}
+.btn-primary:hover  { background: var(--accent-2); }
+.btn-primary:active { transform: translateY(1px); }
+
+.btn-ghost {
+  background: transparent; color: var(--text);
+  border: 1px solid var(--rule-strong);
+  padding: 8px 14px; font: 500 13px/1 inherit; cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background .12s, border-color .12s;
+}
+.btn-ghost:hover { background: var(--bg-3); border-color: var(--bg-hover); }
+.btn-ghost.is-active { background: var(--bg-3); border-color: var(--bg-hover); }
+
+.btn-icon {
+  background: transparent; color: var(--text-muted); border: none;
+  width: 32px; height: 32px; border-radius: var(--radius-sm); cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.btn-icon:hover, .btn-icon.is-active { background: var(--bg-3); color: var(--text); }
+
+.input {
+  background: var(--bg-3); border: 1px solid var(--rule-strong);
+  color: var(--text); padding: 10px 14px;
+  font-family: inherit; font-size: 14px; border-radius: var(--radius-sm);
+  outline: none; width: 100%; transition: border-color .12s;
+}
+.input:focus { border-color: var(--accent); }
+.input::placeholder { color: var(--text-faint); }
+textarea.input { resize: vertical; line-height: 1.6; }
+
+/* Movie poster card */
+.movie-card { cursor: pointer; transition: transform .18s ease; }
+.movie-card:hover { transform: translateY(-2px); }
+.poster-wrap {
+  position: relative; aspect-ratio: 2/3; overflow: hidden;
+  border-radius: var(--radius); box-shadow: var(--shadow-card);
+  outline: 1px solid rgba(255,255,255,0.04); outline-offset: -1px;
+  background: var(--bg-2);
+}
+.poster-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.85) 100%);
+  opacity: 0; transition: opacity .18s ease;
+  display: flex; align-items: flex-end; padding: 14px;
+}
+.movie-card:hover .poster-overlay,
+.movie-card.is-hover .poster-overlay { opacity: 1; }
+
+/* Tag */
+.tag {
+  font-size: 12px; font-weight: 500; color: var(--accent);
+  background: var(--accent-soft);
+  padding: 4px 10px; border-radius: var(--radius-sm);
+}
+.tag-outline {
+  font-size: 11px; font-weight: 500; color: var(--text-muted);
+  border: 1px solid var(--rule-strong); padding: 3px 9px;
+  border-radius: var(--radius-pill);
+}
+
+/* Stars — 별점 (5점 만점, 0.5 단위) */
+.stars { display: inline-flex; gap: 1px; }
+.star  { width: 14px; height: 14px; display: block; color: var(--accent); }
+
+/* Modal */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 100;
+  background: rgba(20, 24, 28, 0.78);
+  backdrop-filter: blur(4px);
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 80px 24px; overflow-y: auto;
+}
+.modal-panel {
+  width: 720px; max-width: 100%;
+  background: var(--bg-2); border: 1px solid var(--rule-strong);
+  border-radius: 8px; box-shadow: var(--shadow-modal);
+}
+
+/* App chrome */
+.appbar { border-bottom: 1px solid var(--rule); background: var(--bg); }
+.appbar-inner {
+  padding: 20px var(--gutter-x);
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.brand-mark {
+  width: 22px; height: 22px; border-radius: 4px; background: var(--accent);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.brand-mark::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--bg);
+}
+.brand-name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; white-space: nowrap; }
+.nav { display: flex; gap: 22px; flex-shrink: 0; }
+.nav-item {
+  font-size: 13px; font-weight: 500; color: var(--text-muted);
+  cursor: pointer; padding: 4px 0; border-bottom: 2px solid transparent;
+  white-space: nowrap;
+}
+.nav-item.is-active { color: var(--text); border-bottom-color: var(--accent); }
+
+/* Stat block */
+.stat-num { font-size: 28px; font-weight: 700; letter-spacing: -0.02em;
+            color: var(--text); white-space: nowrap; }
+.stat-num small { font-size: 16px; color: var(--text-muted); font-weight: 500; }
+
+/* Animations */
+@keyframes pulse  { 0%,100% { opacity: 1; } 50% { opacity: .3; } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); }
+                    to   { opacity: 1; transform: translateY(0); } }
+
+/* Sections of this handoff doc */
+.doc { max-width: 1280px; margin: 0 auto; padding: 56px var(--gutter-x); }
+.doc h1, .doc h2, .doc h3 { letter-spacing: -0.02em; }
+.doc h2 { font-size: 24px; margin: 64px 0 16px; padding-bottom: 12px;
+          border-bottom: 1px solid var(--rule); }
+.doc h3 { font-size: 16px; margin: 28px 0 10px; color: var(--text); }
+.doc p, .doc li { color: var(--text-muted); font-size: 14px; line-height: 1.7; }
+.doc strong { color: var(--text); font-weight: 600; }
+.doc code, .doc pre {
+  font-family: 'JetBrains Mono', 'SF Mono', ui-monospace, monospace;
+  font-size: 12.5px; color: var(--accent);
+}
+.doc pre {
+  background: #0E1115; border: 1px solid var(--rule-strong);
+  border-radius: var(--radius); padding: 16px 20px; overflow-x: auto;
+  color: var(--text); line-height: 1.6;
+}
+.doc pre .k { color: #a78bfa; }
+.doc pre .s { color: #62D26F; }
+.doc pre .c { color: var(--text-faint); font-style: italic; }
+.doc pre .n { color: #f59e0b; }
+.swatches { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+.swatch {
+  border-radius: var(--radius); overflow: hidden;
+  border: 1px solid var(--rule-strong); background: var(--bg-2);
+}
+.swatch .chip { height: 84px; display: flex; align-items: flex-end; padding: 10px 12px; }
+.swatch .meta { padding: 10px 12px; border-top: 1px solid var(--rule); }
+.swatch .name { font-size: 12px; font-weight: 600; color: var(--text); }
+.swatch .val  { font-size: 11px; color: var(--text-muted); margin-top: 2px;
+                font-family: 'JetBrains Mono', monospace; }
+
+.kvtable { width: 100%; border-collapse: collapse; margin: 12px 0; }
+.kvtable th, .kvtable td {
+  text-align: left; padding: 10px 14px;
+  border-bottom: 1px solid var(--rule); font-size: 13px;
+}
+.kvtable th { color: var(--text-muted); font-weight: 500;
+              background: rgba(255,255,255,0.02); }
+.kvtable td { color: var(--text); }
+.kvtable td.code { font-family: 'JetBrains Mono', monospace; color: var(--accent); font-size: 12px; }
+
+.callout {
+  background: var(--accent-soft); border-left: 3px solid var(--accent);
+  padding: 14px 18px; border-radius: var(--radius);
+  margin: 16px 0; color: var(--text);
+}
+.callout strong { color: var(--accent); }
+
+/* Live preview frames inside the handoff doc */
+.preview {
+  border: 1px solid var(--rule-strong); border-radius: 8px;
+  overflow: hidden; margin: 20px 0;
+  background: var(--bg);
+}
+.preview-bar {
+  padding: 10px 14px; border-bottom: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(0,0,0,0.2);
+}
+.preview-bar .dots { display: flex; gap: 6px; }
+.preview-bar .dot { width: 10px; height: 10px; border-radius: 50%;
+                    background: var(--rule-strong); }
+.preview-bar .label { font-size: 11px; color: var(--text-muted);
+                      letter-spacing: 0.04em; text-transform: uppercase; }
+.preview-body { padding: 0; }
+
+.toc { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+.toc a {
+  font-size: 12px; color: var(--text-muted); text-decoration: none;
+  padding: 4px 10px; border: 1px solid var(--rule-strong);
+  border-radius: var(--radius-pill);
+}
+.toc a:hover { color: var(--accent); border-color: var(--accent); }
+</style>
+</head>
+<body>
+
+<div class="doc">
+
+<header style="margin-bottom: 40px;">
+  <div class="t-tiny" style="margin-bottom: 8px;">CLAUDE CODE HANDOFF · v1</div>
+  <h1 class="t-display" style="margin: 0;">Movie Diary</h1>
+  <p style="font-size: 16px; color: var(--text-muted); margin-top: 8px;">
+    개인 영화 기록 앱 · 미니멀 시네필 DB · 다크 모드 · Letterboxd-ish.
+    이 한 파일에 토큰 / 컴포넌트 / 인터랙션 / 구현 노트가 모두 들어 있습니다.
+  </p>
+  <div class="toc">
+    <a href="#overview">개요</a>
+    <a href="#tokens">디자인 토큰</a>
+    <a href="#components">컴포넌트</a>
+    <a href="#screens">3 화면</a>
+    <a href="#interactions">인터랙션</a>
+    <a href="#implementation">구현 노트</a>
+    <a href="#api">TMDB API</a>
+    <a href="#storage">로컬 스토리지</a>
+    <a href="#brief">최종 작업 브리프</a>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     0. OVERVIEW
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="overview">
+  <h2>0 · 개요</h2>
+  <p>
+    <strong>Movie Diary</strong>는 한 사람의 영화 감상 기록을 저장하는 1인용 앱입니다.
+    한 줄 평이 아니라 한 편의 기록 — 별점, 본 날짜, 장문 메모, 태그를 같이 남깁니다.
+    데이터는 로컬 스토리지에 저장하고, 영화 메타데이터(제목/포스터/연도/감독)는 TMDB에서 자동완성으로 채웁니다.
+  </p>
+  <h3>핵심 화면 3개</h3>
+  <ul>
+    <li><strong>① Main List</strong> — 헤더 + 통계 바 + 필터 + 5열 포스터 그리드</li>
+    <li><strong>② Detail</strong> — 좌측 큰 포스터 / 우측 메타·메모·이전 감상 기록 타임라인</li>
+    <li><strong>③ Add/Edit Modal</strong> — TMDB 자동완성 입력, 별점, 메모, 태그</li>
+  </ul>
+  <h3>디자인 원칙</h3>
+  <ul>
+    <li><strong>다크 단일 액센트</strong> — 배경은 4단 그레이, 강조는 오직 부드러운 그린(<code>#62D26F</code>) 하나.</li>
+    <li><strong>포스터가 콘텐츠</strong> — 카드는 포스터 위주, 텍스트는 호버 시 페이드인되는 오버레이로.</li>
+    <li><strong>고요한 타이포그래피</strong> — Pretendard 산세리프, 굵기 위계만으로 정보 깊이를 표현. 세리프/모노 사용 금지.</li>
+    <li><strong>여백은 56px 거터</strong> — 페이지 좌우 거터를 한 변수(<code>--gutter-x</code>)로 통일.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     1. DESIGN TOKENS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="tokens">
+  <h2>1 · 디자인 토큰</h2>
+
+  <h3>1.1 Color — Surface</h3>
+  <div class="swatches">
+    <div class="swatch"><div class="chip" style="background:#14181C;"></div>
+      <div class="meta"><div class="name">--bg</div><div class="val">#14181C</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#1F2937;"></div>
+      <div class="meta"><div class="name">--bg-2</div><div class="val">#1F2937</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#2C3440;"></div>
+      <div class="meta"><div class="name">--bg-3 / --rule</div><div class="val">#2C3440</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#384250;"></div>
+      <div class="meta"><div class="name">--bg-hover / --rule-strong</div><div class="val">#384250</div></div></div>
+  </div>
+
+  <h3>1.2 Color — Text</h3>
+  <div class="swatches">
+    <div class="swatch"><div class="chip" style="background:#E5E7EB; color:#0F1216; font-weight:600;">primary</div>
+      <div class="meta"><div class="name">--text</div><div class="val">#E5E7EB</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#9CA3AF; color:#0F1216; font-weight:600;">muted</div>
+      <div class="meta"><div class="name">--text-muted</div><div class="val">#9CA3AF</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#6B7280; color:#0F1216; font-weight:600;">faint</div>
+      <div class="meta"><div class="name">--text-faint</div><div class="val">#6B7280</div></div></div>
+    <div class="swatch"><div class="chip" style="background:#62D26F; color:#0F1216; font-weight:700;">accent ★</div>
+      <div class="meta"><div class="name">--accent</div><div class="val">#62D26F</div></div></div>
+  </div>
+  <p style="margin-top:14px;">
+    액센트는 단 하나입니다. 빨강/노랑/파랑 등 다른 색을 도입하지 마세요. 별점·CTA·태그·포커스 보더·로고 모두 동일한 그린.
+    <code>--accent-soft</code>(투명도 10%)는 태그/선택 행 배경에만 사용.
+  </p>
+
+  <h3>1.3 Typography</h3>
+  <table class="kvtable">
+    <tr><th>토큰</th><th>크기/굵기</th><th>line-height</th><th>letter-spacing</th><th>용도</th></tr>
+    <tr><td class="code">.t-display</td><td>44 / 700</td><td>1.1</td><td>-0.025em</td><td>상세 화면 영화 제목</td></tr>
+    <tr><td class="code">.t-h1</td>     <td>36 / 700</td><td>1.2</td><td>-0.02em</td> <td>리스트 페이지 헤딩</td></tr>
+    <tr><td class="code">.t-h2</td>     <td>22 / 600</td><td>1.3</td><td>-0.01em</td> <td>섹션 헤딩, 모달 제목</td></tr>
+    <tr><td class="code">.t-h3</td>     <td>16 / 600</td><td>1.4</td><td>-0.005em</td><td>카드 영화 제목 (14px), 라벨</td></tr>
+    <tr><td class="code">.t-body-lg</td><td>15 / 400</td><td>1.65</td><td>0</td>      <td>메모 본문</td></tr>
+    <tr><td class="code">.t-body</td>   <td>14 / 400</td><td>1.6</td><td>0</td>       <td>일반 본문</td></tr>
+    <tr><td class="code">.t-meta</td>   <td>12 / 500</td><td>1.4</td><td>0</td>       <td>날짜·연도·러닝타임</td></tr>
+    <tr><td class="code">.t-tiny</td>   <td>11 / 500</td><td>1.4</td><td>+0.04em UPPER</td><td>섹션 라벨, 카테고리 헤더</td></tr>
+  </table>
+  <p>폰트 스택: <code>'Pretendard', 'Inter', system-ui, sans-serif</code>. 한글은 Pretendard, 라틴은 Inter.
+     <strong>Pretendard는 jsDelivr CDN으로 로드</strong>합니다 (구글폰트에 미게시).</p>
+  <pre><span class="c">/* head에 두 줄 모두 필요 */</span>
+&lt;link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5f2f2d3a2b3a313b3e2d3b1f296e716c7166">[email&#160;protected]</a>/dist/web/static/pretendard.min.css"&gt;</pre>
+
+  <h3>1.4 Spacing</h3>
+  <p>4px 기반 스케일. 토큰은 <code>--s-1</code> ~ <code>--s-14</code>이며, 이름의 숫자가 곧 4의 배수 단계입니다.</p>
+  <table class="kvtable">
+    <tr><th>토큰</th><th>값</th><th>전형적 용도</th></tr>
+    <tr><td class="code">--s-1</td>  <td>4px</td>  <td>아이콘 내 간격</td></tr>
+    <tr><td class="code">--s-2</td>  <td>8px</td>  <td>버튼 사이, 태그 사이</td></tr>
+    <tr><td class="code">--s-3</td>  <td>12px</td> <td>인풋 내 패딩</td></tr>
+    <tr><td class="code">--s-4</td>  <td>16px</td> <td>카드 내부 row gap</td></tr>
+    <tr><td class="code">--s-6</td>  <td>24px</td> <td>카드 사이 (그리드 column gap)</td></tr>
+    <tr><td class="code">--s-8</td>  <td>32px</td> <td>그리드 row gap, 섹션 내 블록 사이</td></tr>
+    <tr><td class="code">--s-12</td> <td>48px</td> <td>통계 블록 사이, 섹션 사이</td></tr>
+    <tr><td class="code">--s-14</td> <td>56px</td> <td>페이지 좌우 거터 (<code>--gutter-x</code>)</td></tr>
+  </table>
+
+  <h3>1.5 Radius / Shadow</h3>
+  <table class="kvtable">
+    <tr><th>토큰</th><th>값</th><th>용도</th></tr>
+    <tr><td class="code">--radius</td>     <td>6px</td> <td>카드, 패널, 포스터</td></tr>
+    <tr><td class="code">--radius-sm</td>  <td>4px</td> <td>버튼, 인풋, 태그</td></tr>
+    <tr><td class="code">--radius-pill</td><td>999px</td><td>장르 칩(아웃라인)</td></tr>
+    <tr><td class="code">--shadow-card</td>  <td>0 4px 14px rgba(0,0,0,.35)</td><td>포스터 카드</td></tr>
+    <tr><td class="code">--shadow-modal</td> <td>0 30px 80px rgba(0,0,0,.6)</td><td>모달 패널</td></tr>
+    <tr><td class="code">--shadow-popover</td><td>0 16px 40px rgba(0,0,0,.5)</td><td>자동완성 드롭다운</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     2. COMPONENTS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="components">
+  <h2>2 · 컴포넌트</h2>
+
+  <!-- Buttons -->
+  <h3>2.1 버튼 — Primary / Ghost / Icon</h3>
+  <div class="preview">
+    <div class="preview-bar"><span class="label">Buttons</span></div>
+    <div class="preview-body" style="padding: 24px; display: flex; gap: 12px; align-items: center;">
+      <button class="btn-primary">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+        새 영화 기록
+      </button>
+      <button class="btn-ghost">최신순</button>
+      <button class="btn-ghost is-active">별점순</button>
+      <button class="btn-icon" aria-label="grid">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+      </button>
+      <button class="btn-icon is-active" aria-label="list">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+<pre>&lt;button class="btn-primary"&gt;새 영화 기록&lt;/button&gt;
+&lt;button class="btn-ghost"&gt;최신순&lt;/button&gt;
+&lt;button class="btn-ghost is-active"&gt;별점순&lt;/button&gt;     <span class="c">// 선택 상태</span>
+&lt;button class="btn-icon"&gt;&lt;svg .../&gt;&lt;/button&gt;</pre>
+
+  <!-- Stars -->
+  <h3>2.2 별점 (Stars) — 0.5 단위, 5점 만점</h3>
+  <div class="preview">
+    <div class="preview-bar"><span class="label">Stars · 14 / 20px</span></div>
+    <div class="preview-body" style="padding: 24px; display: flex; flex-direction: column; gap: 14px;">
+      <div id="demo-stars-1"></div>
+      <div id="demo-stars-2"></div>
+      <div id="demo-stars-3"></div>
+    </div>
+  </div>
+<pre><span class="c">// 14px / 5점 / 0.5단위</span>
+&lt;span class="stars" data-rating="4.5" data-size="14"&gt;&lt;/span&gt;
+
+<span class="c">// JS로 SVG 채워넣기 (renderStars 함수 — §6 참고)</span>
+renderStars(el, value, size);   <span class="c">// value: 0–5, 0.5 step</span></pre>
+  <p>구조: 5개의 <code>&lt;svg&gt;</code> 별이 inline-flex로 1px 간격. 채움 상태 3가지 — 빈별(stroke만, <code>rgba(156,163,175,0.4)</code>) / 반별(<code>clipPath</code>로 좌측 절반만) / 꽉별(fill 액센트).</p>
+
+  <!-- Movie Card -->
+  <h3>2.3 영화 카드 (Movie Card)</h3>
+  <div class="preview">
+    <div class="preview-bar"><span class="label">Movie Card · default + hover</span></div>
+    <div class="preview-body" style="padding: 24px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; background: var(--bg);">
+      <div class="movie-card" id="demo-card-1"></div>
+      <div class="movie-card is-hover" id="demo-card-2"></div>
+      <div class="movie-card" id="demo-card-3"></div>
+      <div class="movie-card" id="demo-card-4"></div>
+    </div>
+  </div>
+<pre>&lt;article class="movie-card"&gt;
+  &lt;div class="poster-wrap"&gt;
+    &lt;img src="POSTER_URL" alt="" /&gt;
+    &lt;div class="poster-overlay"&gt;
+      &lt;div&gt;
+        &lt;span class="stars" data-rating="5"&gt;&lt;/span&gt;
+        &lt;div class="t-meta" style="margin-top:6px; color: rgba(229,231,235,.85);"&gt;
+          2026년 4월 22일 감상
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div style="margin-top: 10px; padding: 0 2px;"&gt;
+    &lt;h3 class="t-h3" style="margin:0; font-size:14px;"&gt;화양연화&lt;/h3&gt;
+    &lt;div style="display:flex; justify-content:space-between; margin-top:6px;"&gt;
+      &lt;span class="stars" data-rating="5" data-size="11"&gt;&lt;/span&gt;
+      &lt;span class="t-meta" style="font-size:11px;"&gt;4월 22일&lt;/span&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/article&gt;</pre>
+
+  <!-- Tags -->
+  <h3>2.4 태그 — Solid (액센트) / Outline (장르)</h3>
+  <div class="preview">
+    <div class="preview-bar"><span class="label">Tags</span></div>
+    <div class="preview-body" style="padding: 24px; display: flex; flex-wrap: wrap; gap: 8px; align-items: center;">
+      <span class="tag">#재관람</span>
+      <span class="tag">#홍콩</span>
+      <span class="tag">#왕가위_5선</span>
+      <span style="width: 1px; height: 18px; background: var(--rule-strong); margin: 0 8px;"></span>
+      <span class="tag-outline">로맨스</span>
+      <span class="tag-outline">드라마</span>
+      <span class="tag-outline">홍콩</span>
+    </div>
+  </div>
+<pre><span class="c">/* 사용자 태그 (메모 위, 제거 가능) */</span>
+&lt;span class="tag"&gt;#재관람&lt;span class="x"&gt;×&lt;/span&gt;&lt;/span&gt;
+
+<span class="c">/* 장르 칩 (TMDB에서 자동, 읽기 전용) */</span>
+&lt;span class="tag-outline"&gt;로맨스&lt;/span&gt;</pre>
+
+  <!-- Inputs -->
+  <h3>2.5 입력 폼 — Text / Date / Textarea / Tag-input</h3>
+  <div class="preview">
+    <div class="preview-bar"><span class="label">Form fields</span></div>
+    <div class="preview-body" style="padding: 24px; display: flex; flex-direction: column; gap: 16px;">
+      <div>
+        <label style="font-size:12px; font-weight:600; display:block; margin-bottom:8px;">영화 제목 <span style="color:var(--accent);">*</span></label>
+        <div style="position:relative;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" style="position:absolute; left:14px; top:50%; transform:translateY(-50%);"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+          <input class="input" placeholder="영화 검색…" style="padding-left:38px;" />
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <div>
+          <label style="font-size:12px; font-weight:600; display:block; margin-bottom:8px;">본 날짜 <span style="color:var(--accent);">*</span></label>
+          <input class="input" type="date" />
+        </div>
+        <div>
+          <label style="font-size:12px; font-weight:600; display:block; margin-bottom:8px;">별점 <span style="color:var(--accent);">*</span></label>
+          <div class="input" style="display: flex; align-items: center; justify-content: space-between;">
+            <span class="stars" id="demo-stars-input" data-rating="4.5" data-size="20"></span>
+            <span style="color: var(--accent); font-weight: 600;">4.5 <span style="color:var(--text-faint); font-weight:400;">/ 5</span></span>
+          </div>
+        </div>
+      </div>
+      <div>
+        <label style="font-size:12px; font-weight:600; display:block; margin-bottom:8px;">감상 메모</label>
+        <textarea class="input" rows="3" placeholder="이 영화에 대해 남기고 싶은 말…"></textarea>
+      </div>
+      <div>
+        <label style="font-size:12px; font-weight:600; display:block; margin-bottom:8px;">태그</label>
+        <div style="display:flex; flex-wrap:wrap; gap:6px; align-items:center; padding:8px 12px; background:var(--bg-3); border:1px solid var(--rule-strong); border-radius:var(--radius-sm); min-height:40px;">
+          <span class="tag">#재관람 <span style="color:var(--text-muted); margin-left:4px; cursor:pointer;">×</span></span>
+          <input style="flex:1; min-width:100px; background:transparent; border:none; outline:none; color:var(--text); font-size:13px;" placeholder="태그 추가… (Enter)" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <h3>2.6 모달 — 패널 + 백드롭 + 푸터</h3>
+  <p>모달은 <code>position: fixed; inset: 0;</code> 풀스크린 백드롭 안에 720px 패널을 띄웁니다. 백드롭은 <code>backdrop-filter: blur(4px)</code>와 78% 검정 오버레이.</p>
+<pre>&lt;div class="modal-backdrop" role="dialog" aria-modal="true"&gt;
+  &lt;div class="modal-panel"&gt;
+    &lt;header&gt;…&lt;/header&gt;
+    &lt;div class="modal-body"&gt;…&lt;/div&gt;
+    &lt;footer&gt;
+      &lt;button class="btn-ghost"&gt;취소&lt;/button&gt;
+      &lt;button class="btn-primary"&gt;기록 저장&lt;/button&gt;
+    &lt;/footer&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     3. SCREENS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="screens">
+  <h2>3 · 3 화면 사양</h2>
+
+  <h3>3.1 ① 메인 — 영화 목록</h3>
+  <p>구조 (위에서 아래):</p>
+  <ol>
+    <li><strong>App Bar</strong> · 좌(로고+네비) / 우(검색 인풋 240px + Primary CTA "새 영화 기록") · 좌우 거터 56px · 보더 1px <code>--rule</code></li>
+    <li><strong>Hero stat bar</strong> · 좌측 H1 "최근 본 영화" + 서브카피 / 우측 통계 3블록 (총 기록 / 올해 / 평균 별점) · 위아래 패딩 40 / 28</li>
+    <li><strong>Filter bar</strong> · 좌측 정렬 ghost 버튼 4개 (최신순/별점순/연도순/제목순) / 우측 표시 카운트 + 그리드/리스트 토글</li>
+    <li><strong>Grid</strong> · <code>repeat(5, 1fr)</code>, gap <code>32px 24px</code> (row × col) · 이하 카드</li>
+    <li><strong>Footer</strong> · "더 불러오기" ghost 버튼 가운데 정렬</li>
+  </ol>
+  <p>네비 항목: 전체 / 2026 / 좋아요 / 리스트 / 통계. 활성 항목은 액센트 보더 하단 2px + <code>--text</code> 색.</p>
+
+  <h3>3.2 ② 상세 — 영화 한 편</h3>
+  <p>2단 그리드 <code>380px 1fr</code>, gap 56px:</p>
+  <ul>
+    <li><strong>좌</strong>: 큰 포스터(2:3 비율) + 좋아요/리스트에 추가 ghost 버튼 2개</li>
+    <li><strong>우</strong>: 카테고리 라벨 → H1 영화 제목 (44px) → 영문 제목·연도·러닝타임 → 별점(20px)+숫자+감상 일시 → 장르 칩 → <strong>Credits 패널</strong>(<code>--bg-2</code>, 2열, 감독/각본/주연/촬영/국가/개봉) → <strong>메모 블록</strong>(<code>--bg-2</code>, 좌측 3px 액센트 보더) + 사용자 태그 → <strong>이전 감상 기록 타임라인</strong>(같은 영화의 과거 별점/메모 행)</li>
+  </ul>
+
+  <h3>3.3 ③ 모달 — 새 영화 기록</h3>
+  <p>720px 패널, 헤더(작은 라벨 NEW ENTRY + H2 제목 + 닫기) → 본문(필드 4개) → 푸터(자동저장 안내 / 취소·저장 버튼).</p>
+  <p>본문 필드 순서:</p>
+  <ol>
+    <li><strong>영화 제목 *</strong> — 검색 아이콘 + 인풋 + 우측 "검색 중" 펄스, 아래에 <strong>자동완성 드롭다운</strong> (포스터 38×56 + 제목 + 영문/연도/감독). 선택된 행은 <code>--accent-soft</code> 배경 + 우측 "선택됨" 라벨.</li>
+    <li><strong>본 날짜 * / 별점 *</strong> — 2열 그리드. 별점은 인풋 박스 내부에 별 5개 + "4.5 / 5" 텍스트.</li>
+    <li><strong>감상 메모</strong> — 멀티라인 textarea(min-height 140), 우측 상단에 글자수 카운터, 우측 하단에 "마크다운 지원" 힌트.</li>
+    <li><strong>태그</strong> — 칩 + 인라인 인풋. Enter로 추가, × 클릭으로 제거.</li>
+  </ol>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     4. INTERACTIONS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="interactions">
+  <h2>4 · 인터랙션 노트</h2>
+
+  <h3>4.1 카드 호버</h3>
+  <ul>
+    <li>카드 자체: <code>transform: translateY(-2px)</code> · 0.18s ease.</li>
+    <li>포스터 위에 그라디언트 오버레이가 <code>opacity 0 → 1</code>로 페이드인. 안에 별점(13px) + 감상 일시.</li>
+    <li>카드 클릭 → 상세 화면으로 이동. <code>history.pushState</code>로 URL을 <code>?id=N</code>으로 갱신.</li>
+  </ul>
+
+  <h3>4.2 별점 입력 (모달 / 상세 inline edit)</h3>
+  <ul>
+    <li>마우스 오버 시 <strong>각 별의 좌/우 절반</strong>에 따라 0.5/1.0 미리보기 표시.</li>
+    <li>클릭 시 확정. 같은 값을 다시 클릭하면 0.5 감소(취소 동작은 따로 X 버튼이 아니라 토글로).</li>
+    <li>키보드: <kbd>←</kbd> / <kbd>→</kbd>로 0.5씩 조정, <kbd>0</kbd>~<kbd>5</kbd> 숫자키로 정수 별점.</li>
+  </ul>
+
+  <h3>4.3 모달 열기 / 닫기</h3>
+  <ul>
+    <li>열기: 헤더의 "새 영화 기록" 또는 빈 상태의 큰 CTA. <code>body</code>에 <code>overflow: hidden</code> 추가하여 배경 스크롤 잠금.</li>
+    <li>닫기 트리거: 우상단 X / 백드롭 클릭 / <kbd>Esc</kbd>. 단, <strong>입력값이 있을 때 백드롭 클릭/Esc는 확인 다이얼로그</strong>를 띄움.</li>
+    <li>저장: <kbd>⌘/Ctrl + Enter</kbd>로 폼 제출.</li>
+    <li>모달 진입 애니메이션: <code>fadeIn .18s</code> (위 키프레임 정의 사용).</li>
+  </ul>
+
+  <h3>4.4 TMDB 자동완성</h3>
+  <ul>
+    <li>입력 후 <strong>250ms debounce</strong>. 빈 문자열이면 즉시 닫힘.</li>
+    <li>요청 중에는 우측 펄스 인디케이터 + "검색 중" 텍스트 표시.</li>
+    <li>드롭다운은 인풋 바로 아래 <code>top: calc(100% + 6px)</code>. 키보드: <kbd>↑</kbd>/<kbd>↓</kbd>로 이동, <kbd>Enter</kbd>로 선택, <kbd>Esc</kbd>로 닫기. 선택된 행은 좌측 3px 액센트 보더 또는 <code>--accent-soft</code> 배경 + 우측 "선택됨" 라벨.</li>
+    <li>최대 8개 결과. 결과 0건이면 "검색 결과 없음 — 직접 입력하기" 행을 마지막에 표시.</li>
+    <li>선택 시 인풋에 한국어 제목 채움 + 영화의 메타데이터(영문제목/연도/감독/포스터 URL/장르)를 hidden 상태로 보관 → 저장 시 함께 기록.</li>
+  </ul>
+
+  <h3>4.5 태그 입력</h3>
+  <ul>
+    <li>인라인 인풋에 글자 입력 후 <kbd>Enter</kbd> 또는 <kbd>,</kbd>로 칩 추가. 빈 인풋에서 <kbd>Backspace</kbd>는 마지막 칩 제거.</li>
+    <li>중복 태그는 무시 (조용히 reject + 인풋 살짝 흔드는 shake 모션).</li>
+    <li>칩의 <code>×</code> 클릭 시 즉시 제거.</li>
+  </ul>
+
+  <h3>4.6 정렬 / 필터 / 검색</h3>
+  <ul>
+    <li>정렬 ghost 버튼: 라디오 그룹(한 개만 활성). 활성 = <code>.is-active</code>.</li>
+    <li>네비 "전체 / 2026 / 좋아요 / 리스트 / 통계": 라우팅. 2026은 연도 필터, 좋아요는 <code>liked === true</code>.</li>
+    <li>검색 인풋(헤더 240px): debounce 200ms 후 클라이언트 사이드 필터 (제목 + 감독 + 메모 모두 검색).</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     5. IMPLEMENTATION NOTES
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="implementation">
+  <h2>5 · 구현 노트</h2>
+
+  <h3>5.1 반응형 그리드 브레이크포인트</h3>
+  <p>리스트 그리드는 뷰포트에 따라 칼럼 수를 단계적으로 줄입니다:</p>
+  <table class="kvtable">
+    <tr><th>min-width</th><th>그리드</th><th>거터</th><th>비고</th></tr>
+    <tr><td>≥ 1280px</td><td>5 columns</td><td>56px</td><td>기본 데스크탑</td></tr>
+    <tr><td>≥ 1024px</td><td>4 columns</td><td>40px</td><td>좁은 데스크탑 / 큰 태블릿</td></tr>
+    <tr><td>≥ 720px</td> <td>3 columns</td><td>32px</td><td>태블릿</td></tr>
+    <tr><td>≥ 480px</td> <td>2 columns</td><td>20px</td><td>큰 모바일</td></tr>
+    <tr><td>&lt; 480px</td> <td>2 columns</td><td>16px</td><td>모바일. 검색·통계는 stack.</td></tr>
+  </table>
+  <p>상세 화면의 2단 그리드는 <strong>≥ 900px</strong>에서만 유지. 그 이하에서는 1단 stack(포스터 위 280px 정사각 wrap, 그 아래 메타).</p>
+  <p>모달은 <strong>≥ 768px</strong>에서 720px 가운데 정렬, 그 이하에서는 좌우 12px 마진의 풀너비.</p>
+
+  <h3>5.2 다크 모드 토큰</h3>
+  <div class="callout">
+    이 디자인은 <strong>다크 only</strong>입니다. 라이트 모드는 v1 범위 외. 그래도 향후 추가 가능하도록
+    <strong>모든 색은 <code>:root</code>의 변수로만 참조</strong>하세요. 인라인 hex(<code>#fff</code>) 금지.
+    유일한 예외는 별점 SVG 빈별의 <code>rgba(156,163,175,0.4)</code>와 모달 백드롭의 <code>rgba(20,24,28,0.78)</code> — 이 두 곳만 변수 외 색 허용.
+  </div>
+
+  <h3>5.3 폰트 로딩</h3>
+  <ul>
+    <li>Pretendard는 Google Fonts에 없습니다. 반드시 <strong>jsDelivr</strong> CDN의 <code>pretendard.min.css</code>를 사용 (버전 핀 권장: <code>@v1.3.9</code>).</li>
+    <li>FOUT 방지를 위해 <code>&lt;head&gt;</code> 최상단에 <code>preconnect</code>로 <code>fonts.googleapis.com</code>, <code>fonts.gstatic.com</code>, <code>cdn.jsdelivr.net</code> 3곳 모두 연결.</li>
+    <li>한글이 다수이므로 <code>font-display: swap</code>은 Pretendard 기본값을 따릅니다 (수정 불필요).</li>
+  </ul>
+
+  <h3>5.4 접근성</h3>
+  <ul>
+    <li>모달: <code>role="dialog" aria-modal="true"</code>, 열릴 때 <strong>포커스를 닫기 버튼이 아닌 첫 인풋(영화 제목)에 이동</strong>. 닫힐 때 트리거 버튼으로 포커스 복귀.</li>
+    <li>별점: <code>role="radiogroup"</code> + 각 별 <code>role="radio" aria-checked</code>. 키보드만으로도 변경 가능.</li>
+    <li>아이콘 버튼은 모두 <code>aria-label</code> 필수.</li>
+    <li>태그 칩의 × 버튼: <code>aria-label="태그 제거: #재관람"</code> 형태로 어떤 태그인지 명시.</li>
+    <li>색대비: <code>--text-muted (#9CA3AF)</code>는 <code>--bg (#14181C)</code> 위에서 7.6:1 — AAA 통과. <code>--text-faint</code>는 보조 정보(글자수 등)에만 사용.</li>
+  </ul>
+
+  <h3>5.5 영화 포스터 이미지</h3>
+  <ul>
+    <li>TMDB 포스터: <code>https://image.tmdb.org/t/p/w500&lt;poster_path&gt;</code>. 카드는 w342, 상세 hero는 w500이면 충분.</li>
+    <li>포스터 누락 시 fallback: <code>--bg-2</code> 배경 + 가운데 "NO POSTER" <code>.t-tiny</code> 텍스트.</li>
+    <li><code>img</code>에는 항상 <code>alt="{영화제목} 포스터"</code>, <code>loading="lazy"</code>, <code>decoding="async"</code> 지정.</li>
+  </ul>
+
+  <h3>5.6 단일 HTML 패키징 가이드</h3>
+  <ul>
+    <li>한 파일 안에 모두 — <code>&lt;style&gt;</code>, <code>&lt;script&gt;</code> 모두 인라인. 외부 의존은 폰트 2개와 (선택) React UMD만.</li>
+    <li>React UMD를 쓰지 않는다면 가벼운 <strong>vanilla DOM 렌더 함수</strong>로 충분합니다 (영화 카드/별점 등 모두 stateless template로 표현 가능). 인터랙션 상태는 한두 군데(모달 열림, 정렬 키, 검색어)만 있으므로 <code>let state = {…}; render()</code> 패턴이 적합.</li>
+    <li>SVG 별/아이콘은 인라인 사용. 별점은 동일 SVG path를 5번 반복하고 <code>clipPath</code>로 절반 채움.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     6. APPENDIX A — RENDER HELPERS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="api">
+  <h2>6 · TMDB API 연동</h2>
+  <h3>6.1 인증</h3>
+  <ul>
+    <li>TMDB v3 API 키를 사용. <code>https://api.themoviedb.org/3/search/movie</code></li>
+    <li>키는 환경변수가 아닌 <strong>사용자 설정</strong>으로: 첫 실행 시 "TMDB API 키 입력" 모달을 띄우고 <code>localStorage.tmdbKey</code>에 저장. 이후 모든 요청에 <code>?api_key={key}&language=ko-KR</code>.</li>
+  </ul>
+  <h3>6.2 검색 엔드포인트</h3>
+<pre><span class="c">// 영화 제목 자동완성</span>
+GET https://api.themoviedb.org/3/search/movie
+    ?api_key={key}
+    &language=ko-KR
+    &query={입력값}
+    &include_adult=false
+    &page=1
+
+<span class="c">// 응답 매핑 (drop down 표시용)</span>
+{
+  id, title,                          <span class="c">// → 한국어 제목</span>
+  original_title,                     <span class="c">// → 영문/원어 제목</span>
+  release_date.slice(0,4),            <span class="c">// → 연도</span>
+  poster_path,                        <span class="c">// → image.tmdb.org/t/p/w185 + path</span>
+  genre_ids[]                         <span class="c">// → /genre/movie/list 매핑</span>
+}</pre>
+
+  <h3>6.3 상세 보강</h3>
+  <p>사용자가 자동완성에서 영화를 선택한 시점에 한 번 더 호출해 감독·러닝타임을 보강:</p>
+<pre>GET /3/movie/{id}?api_key={key}&language=ko-KR&append_to_response=credits
+
+<span class="c">// 매핑</span>
+runtime,                                      <span class="c">// → "1시간 38분"</span>
+credits.crew.find(c =&gt; c.job === 'Director'), <span class="c">// → 감독</span>
+credits.cast.slice(0, 2),                     <span class="c">// → 주연 2명</span>
+production_countries[0].iso_3166_1            <span class="c">// → 국가 코드</span></pre>
+
+  <h3>6.4 레이트 리밋 / 캐시</h3>
+  <ul>
+    <li>TMDB는 분당 ~50req 제한. 자동완성에 250ms debounce + 동일 query 결과는 5분간 메모리 캐시.</li>
+    <li>한 번 저장된 영화의 메타데이터(<code>tmdbId</code>, <code>posterPath</code>, …)는 <strong>로컬에 그대로 보관</strong>해서 재호출 불필요.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     7. STORAGE
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="storage">
+  <h2>7 · 로컬 스토리지 스키마</h2>
+  <p>모든 사용자 데이터는 한 키 <code>movieDiary.v1</code>에 JSON으로 직렬화 저장.</p>
+<pre><span class="k">localStorage</span>[<span class="s">'movieDiary.v1'</span>] = JSON.stringify({
+  <span class="s">"settings"</span>: {
+    <span class="s">"tmdbKey"</span>: <span class="s">"…"</span>,
+    <span class="s">"sort"</span>: <span class="s">"recent"</span>,            <span class="c">// recent | rating | year | title</span>
+    <span class="s">"view"</span>: <span class="s">"grid"</span>               <span class="c">// grid | list</span>
+  },
+  <span class="s">"entries"</span>: [
+    {
+      <span class="s">"id"</span>: <span class="s">"e_2026-04-22_화양연화_3"</span>,    <span class="c">// 날짜 + 제목 + 재감상횟수</span>
+      <span class="s">"tmdbId"</span>: <span class="n">843</span>,
+      <span class="s">"title"</span>: <span class="s">"화양연화"</span>,
+      <span class="s">"originalTitle"</span>: <span class="s">"In the Mood for Love"</span>,
+      <span class="s">"year"</span>: <span class="n">2000</span>,
+      <span class="s">"runtime"</span>: <span class="n">98</span>,
+      <span class="s">"director"</span>: <span class="s">"왕가위"</span>,
+      <span class="s">"posterPath"</span>: <span class="s">"/iYBdgxOuE3rlFXjhU8VZSMfizjV.jpg"</span>,
+      <span class="s">"genres"</span>: [<span class="s">"로맨스"</span>, <span class="s">"드라마"</span>],
+      <span class="s">"watched"</span>: <span class="s">"2026-04-22T23:14:00+09:00"</span>,
+      <span class="s">"rating"</span>: <span class="n">5</span>,                  <span class="c">// 0.5 단위 0–5</span>
+      <span class="s">"note"</span>: <span class="s">"복도와 계단, 빨간 벽지의 호텔…"</span>,
+      <span class="s">"tags"</span>: [<span class="s">"#재관람"</span>, <span class="s">"#홍콩"</span>],
+      <span class="s">"liked"</span>: <span class="k">true</span>,
+      <span class="s">"createdAt"</span>: <span class="s">"2026-04-22T23:14:00+09:00"</span>,
+      <span class="s">"updatedAt"</span>: <span class="s">"2026-04-22T23:18:00+09:00"</span>
+    }
+  ]
+});</pre>
+  <h3>주의</h3>
+  <ul>
+    <li>한 영화를 여러 번 본 경우는 <strong>각 감상이 별도 entry</strong>. <code>tmdbId</code>로 묶어서 상세에 "이전 감상 기록" 타임라인 생성.</li>
+    <li>저장은 <code>updatedAt</code>이 바뀔 때마다 즉시 (모달 입력 중에도 <strong>5초마다 자동 임시 저장</strong> → <code>movieDiary.draft</code> 별도 키).</li>
+    <li>스토리지가 5MB에 근접하면 (대략 5,000편) 경고 토스트 표시.</li>
+    <li>임포트/익스포트: 설정 화면에 "JSON으로 내보내기" / "가져오기" 버튼. 마이그레이션을 위해 항상 <code>{ version: 1, ... }</code> 래퍼 사용.</li>
+  </ul>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     8. APPENDIX — RENDER HELPERS
+     ═══════════════════════════════════════════════════════════════ -->
+<section id="brief">
+  <h2>8 · Claude Code 작업 브리프</h2>
+  <div class="callout">
+    <strong>목표:</strong> 이 핸드오프 파일을 받아 단일 <code>movie-diary.html</code>(외부 의존 = 폰트 + 선택적 React UMD만)로 동작하는 앱을 구현하세요.
+    데이터는 로컬 스토리지, 영화 메타데이터는 TMDB. 디자인 토큰은 위 <code>:root</code>를 그대로 사용.
+  </div>
+  <h3>최소 요구사항 (MVP)</h3>
+  <ol>
+    <li>3 화면 구현 — 리스트(라우트 <code>/</code>) / 상세(<code>/?id=N</code>) / 모달(<code>?new</code> 또는 <code>?edit=N</code>).</li>
+    <li>TMDB 자동완성 검색 + 선택 시 메타 자동 채움.</li>
+    <li>별점(0.5 단위), 본 날짜, 메모, 태그 입력 + 로컬 스토리지 저장.</li>
+    <li>리스트 정렬 4가지(최신/별점/연도/제목) + 검색(제목·감독·메모) + 좋아요/올해 필터.</li>
+    <li>상세에서 같은 영화의 이전 감상 기록 타임라인.</li>
+    <li>JSON 내보내기/가져오기.</li>
+    <li>키보드 인터랙션: 모달 Esc/⌘Enter, 별점 ←→/숫자, 자동완성 ↑↓ Enter Esc.</li>
+    <li>반응형 5/4/3/2 column 그리드 + 상세 stack 전환 + 모달 풀너비 전환.</li>
+  </ol>
+  <h3>해서는 안 되는 것</h3>
+  <ul>
+    <li>다른 액센트 색 추가 금지 (그린 하나만).</li>
+    <li>이모지로 별점/하트 대체 금지 — 반드시 SVG.</li>
+    <li>둥근 모서리 8px 이상 사용 금지 (모달만 8px, 나머지는 6 또는 4).</li>
+    <li>본문 글자 12px 미만 금지. 11px은 <code>.t-tiny</code> UPPERCASE 라벨에만.</li>
+    <li>외부 UI 라이브러리(MUI, Chakra 등) 사용 금지. 가벼운 vanilla 또는 React UMD까지만.</li>
+  </ul>
+  <h3>완료 기준 체크리스트</h3>
+  <ul>
+    <li>☐ 새 영화 기록 → 저장 → 새로고침 후에도 카드가 그리드에 보인다.</li>
+    <li>☐ TMDB 키 미설정 시 첫 실행 안내 모달 표시.</li>
+    <li>☐ 카드 호버 시 오버레이 페이드인, 상세로 이동.</li>
+    <li>☐ 모달 Esc 닫기 + 작성 중일 때는 확인 다이얼로그.</li>
+    <li>☐ 별점 키보드(←→/0–5)로 0.5 단위 조정 가능.</li>
+    <li>☐ 1280 / 1024 / 720 / 480px 4단계 반응형 정상.</li>
+    <li>☐ Lighthouse 접근성 ≥ 95.</li>
+    <li>☐ JSON 내보내기 → 다른 브라우저에서 가져오기 → 동일 상태 복원.</li>
+  </ul>
+</section>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     RENDER HELPERS — 위 미리보기 영역에 별/카드를 채우기 위한 스크립트
+     실제 앱 코드의 시드 역할도 합니다. (Claude Code: 그대로 가져가도 OK)
+     ═══════════════════════════════════════════════════════════════ -->
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* renderStars(value, size) — 0.5 단위 별점 SVG 5개를 inline-flex로 반환 */
+function starsHTML(value, size) {
+  size = size || 14;
+  const acc = '#62D26F', empty = 'rgba(156,163,175,0.4)';
+  let out = `<span class="stars" style="gap:1px;">`;
+  for (let i = 1; i <= 5; i++) {
+    const fill = value >= i ? 1 : value >= i - 0.5 ? 0.5 : 0;
+    const cid = `cl-${i}-${size}-${Math.floor(Math.random()*1e6)}`;
+    out += `<svg width="${size}" height="${size}" viewBox="0 0 24 24" style="display:block;">
+      <defs><clipPath id="${cid}"><rect x="0" y="0" width="12" height="24"/></clipPath></defs>
+      <path d="M12 2 L14.7 8.6 L21.8 9.2 L16.5 13.9 L18.1 21 L12 17.2 L5.9 21 L7.5 13.9 L2.2 9.2 L9.3 8.6 Z"
+            fill="none" stroke="${fill === 0 ? empty : acc}" stroke-width="1.5"/>
+      ${fill === 1 ? `<path d="M12 2 L14.7 8.6 L21.8 9.2 L16.5 13.9 L18.1 21 L12 17.2 L5.9 21 L7.5 13.9 L2.2 9.2 L9.3 8.6 Z" fill="${acc}"/>` : ''}
+      ${fill === 0.5 ? `<path d="M12 2 L14.7 8.6 L21.8 9.2 L16.5 13.9 L18.1 21 L12 17.2 L5.9 21 L7.5 13.9 L2.2 9.2 L9.3 8.6 Z" fill="${acc}" clip-path="url(#${cid})"/>` : ''}
+    </svg>`;
+  }
+  return out + `</span>`;
+}
+
+/* Demo previews */
+document.getElementById('demo-stars-1').innerHTML =
+  starsHTML(5, 14) + ' <span class="t-meta" style="margin-left:10px;">5.0</span>';
+document.getElementById('demo-stars-2').innerHTML =
+  starsHTML(4.5, 14) + ' <span class="t-meta" style="margin-left:10px;">4.5</span>';
+document.getElementById('demo-stars-3').innerHTML =
+  starsHTML(3, 20) + ' <span class="t-meta" style="margin-left:10px; font-size:14px;">3.0</span>';
+document.getElementById('demo-stars-input').outerHTML = starsHTML(4.5, 20);
+
+/* Demo movie cards using CSS-only "posters" */
+const demoMovies = [
+  { title: '화양연화',     date: '4월 22일', rating: 5,
+    bg: 'linear-gradient(160deg, #1a0e14 0%, #2a1218 50%, #3a1a20 100%)', label: 'IN<br>THE<br>MOOD' },
+  { title: '2001 스페이스 오디세이', date: '4월 15일', rating: 4.5,
+    bg: '#050608', label: '2001' },
+  { title: '제3의 사나이', date: '4월 8일',  rating: 4,
+    bg: 'linear-gradient(180deg,#0e1116 0%,#232a35 100%)', label: 'THE<br>THIRD<br>MAN' },
+  { title: '그랜드 부다페스트 호텔', date: '3월 30일', rating: 4.5,
+    bg: 'linear-gradient(180deg,#d68bb0 0%,#e8a8c0 100%)', label: 'GRAND<br>BUDAPEST', dark: true }
+];
+demoMovies.forEach((m, i) => {
+  const root = document.getElementById('demo-card-' + (i+1));
+  if (!root) return;
+  root.innerHTML = `
+    <div class="poster-wrap" style="background:${m.bg};">
+      <div style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+                  font: 700 14px/1.15 Inter, sans-serif; letter-spacing:.18em; text-align:center;
+                  color:${m.dark ? '#3a1a10' : '#E5E7EB'};">${m.label}</div>
+      <div class="poster-overlay">
+        <div style="width:100%;">
+          ${starsHTML(m.rating, 13)}
+          <div style="font-size:11px; font-weight:500; color:rgba(229,231,235,0.85); margin-top:6px;">
+            2026년 ${m.date} 감상
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top:10px; padding:0 2px;">
+      <div style="font-size:14px; font-weight:600; color:var(--text); letter-spacing:-0.005em;">${m.title}</div>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:6px;">
+        ${starsHTML(m.rating, 11)}
+        <div style="font-size:11px; font-weight:500; color:var(--text-muted);">${m.date}</div>
+      </div>
+    </div>
+  `;
+});
+</script>
+
+</body>
+</html>
