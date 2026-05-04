@@ -38,6 +38,8 @@ export interface AppHeaderProps {
   onBrandClick?: () => void;
   /** Click handler for the "새 영화 기록" button. */
   onCreate?: () => void;
+  /** Click handler for nav items — receives the NavKey. */
+  onNavClick?: (key: NavKey) => void;
 }
 
 export function AppHeader({
@@ -49,6 +51,7 @@ export function AppHeader({
   rightSlot,
   onBrandClick,
   onCreate,
+  onNavClick,
 }: AppHeaderProps) {
   return (
     <div style={{ borderBottom: '1px solid var(--rule)', background: 'var(--bg)' }}>
@@ -116,11 +119,21 @@ export function AppHeader({
                 return (
                   <div
                     key={key}
+                    role={onNavClick ? 'button' : undefined}
+                    tabIndex={onNavClick ? 0 : undefined}
+                    onClick={() => onNavClick?.(key)}
+                    onKeyDown={(e) => {
+                      if (!onNavClick) return;
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        onNavClick(key);
+                      }
+                    }}
                     style={{
                       fontSize: 13,
                       fontWeight: 500,
                       color: active ? 'var(--text)' : 'var(--text-muted)',
-                      cursor: 'pointer',
+                      cursor: onNavClick ? 'pointer' : 'default',
                       padding: '4px 0',
                       borderBottom: active
                         ? '2px solid var(--accent)'
