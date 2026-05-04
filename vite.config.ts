@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
-// GitHub Pages base. Local dev uses '/' automatically? No — Vite always uses `base` for both.
-// Phase-1 plan locks `base: '/movie-diary/'`. The dev server will serve from /movie-diary/ as well.
-export default defineConfig({
+// dev → '/', prod build → '/movie-diary/'.
+// BrowserRouter reads import.meta.env.BASE_URL to keep routes in sync.
+export default defineConfig(({ command }) => ({
   plugins: [react()],
-  base: '/movie-diary/',
-});
+  base: command === 'build' ? '/movie-diary/' : '/',
+}));

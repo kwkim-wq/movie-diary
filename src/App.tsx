@@ -24,10 +24,11 @@ import { PlaceholderPage } from './routes/PlaceholderPage';
 import { MoviesProvider } from './store/MoviesContext';
 
 function App() {
-  // basename matches vite.config.ts `base: '/movie-diary/'` so links resolve
-  // correctly both in dev and after `vite build`.
+  // basename mirrors vite's BASE_URL — '/' in dev, '/movie-diary/' in build.
+  // Trailing slash trimmed because react-router expects basename without it.
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || '/';
   return (
-    <BrowserRouter basename="/movie-diary">
+    <BrowserRouter basename={basename}>
       <MoviesProvider>
         <Routes>
           <Route path="/" element={<ListPage filter="all" />} />
