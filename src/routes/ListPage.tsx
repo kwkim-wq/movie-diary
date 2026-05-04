@@ -422,7 +422,7 @@ function ListBody({
           }}
           style={{
             display: 'grid',
-            gridTemplateColumns: '110px 1fr 140px 100px',
+            gridTemplateColumns: '1fr 140px 100px 110px',
             alignItems: 'center',
             gap: 18,
             padding: '14px 0',
@@ -430,9 +430,6 @@ function ListBody({
             cursor: 'pointer',
           }}
         >
-          <div style={{ fontSize: 13, color: 'var(--text-muted)', fontWeight: 500 }}>
-            {fmt.format(new Date(entry.watched))}
-          </div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, minWidth: 0 }}>
             <div
               style={{
@@ -466,6 +463,16 @@ function ListBody({
           <Stars rating={entry.rating} pixelSize={13} gap={1} />
           <div style={{ fontSize: 12, color: 'var(--text-faint)', textAlign: 'right' }}>
             {entry.runtime ? `${Math.floor(entry.runtime / 60)}시간 ${entry.runtime % 60}분` : ''}
+          </div>
+          <div
+            style={{
+              fontSize: 13,
+              color: 'var(--text-muted)',
+              fontWeight: 500,
+              textAlign: 'right',
+            }}
+          >
+            {fmt.format(new Date(entry.watched))}
           </div>
         </div>
       ))}
