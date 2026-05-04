@@ -1,6 +1,6 @@
-// ActorsPage — /actors. Aggregated grid of every cast member that's appeared
-// in any of the user's recorded movies. Provides three views (most-seen,
-// liked-only, alphabetical) plus a 200ms-debounced name search.
+// ActorsPage — /actors. Liked-actors index. Only cast members the user has
+// ❤'d on any movie show up here; sort by most-seen or alphabetical, with a
+// 200ms-debounced name search.
 
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,26 +10,16 @@ import { useDebounce } from '../hooks/useDebounce';
 import { useMovies } from '../hooks/useMovies';
 import type { ActorSummary } from '../types';
 
-type ActorSort = 'count' | 'liked' | 'name';
+type ActorSort = 'count' | 'name';
 
 const SORT_BUTTONS: { key: ActorSort; label: string }[] = [
   { key: 'count', label: '등장순' },
-  { key: 'liked', label: '좋아한 배우만' },
   { key: 'name', label: '가나다순' },
 ];
 
 function compareActors(a: ActorSummary, b: ActorSummary, sort: ActorSort): number {
   switch (sort) {
     case 'count':
-      // Most-seen first; tie-break by liked then by name.
-      if (b.movieCount !== a.movieCount) return b.movieCount - a.movieCount;
-      if (Number(b.likedInAny) !== Number(a.likedInAny)) {
-        return Number(b.likedInAny) - Number(a.likedInAny);
-      }
-      return a.name.localeCompare(b.name, 'ko');
-    case 'liked':
-      // 'liked' is rendered as a *filter* below — leave the order
-      // count-descending so the user still sees their most-watched darlings first.
       if (b.movieCount !== a.movieCount) return b.movieCount - a.movieCount;
       return a.name.localeCompare(b.name, 'ko');
     case 'name':
@@ -47,20 +37,19 @@ export function ActorsPage() {
   const [sort, setSort] = useState<ActorSort>('count');
 
   const allActors = useMemo<ActorSummary[]>(() => getAllActors(), [getAllActors]);
-  const totalActors = allActors.length;
-  const likedCount = useMemo(
-    () => allActors.filter((a) => a.likedInAny).length,
+  // /actors page is a "loved actors" index — only show ❤'d cast members.
+  const likedActors = useMemo(
+    () => allActors.filter((a) => a.likedInAny),
     [allActors],
   );
+  const likedCount = likedActors.length;
 
   const visible = useMemo(() => {
-    let pool = allActors;
-    // 'liked' button doubles as a filter — keeps the toggle row simple.
-    if (sort === 'liked') pool = pool.filter((a) => a.likedInAny);
+    let pool = likedActors;
     const needle = debouncedQuery.trim().toLowerCase();
     if (needle) pool = pool.filter((a) => a.name.toLowerCase().includes(needle));
     return [...pool].sort((a, b) => compareActors(a, b, sort));
-  }, [allActors, sort, debouncedQuery]);
+  }, [likedActors, sort, debouncedQuery]);
 
   const handleNavClick = (key: NavKey) => {
     switch (key) {
@@ -87,8 +76,9 @@ export function ActorsPage() {
 
   if (!hydrated) return null;
 
-  // Empty state — either no entries at all, or entries without any cast.
-  const isEmpty = entries.length === 0 || allActors.length === 0;
+  // Empty state — no liked actors yet (covers both "no entries" and "entries
+  // exist but nothing has been ❤'d yet").
+  const isEmpty = entries.length === 0 || likedCount === 0;
 
   return (
     <div className="scene app-root" style={{ minHeight: '100vh' }}>
@@ -113,17 +103,16 @@ export function ActorsPage() {
       >
         <div>
           <div className="t-tiny" style={{ marginBottom: 10 }}>
-            CAST INDEX
+            FAVORITE CAST
           </div>
           <h1 className="t-h1" style={{ margin: 0, fontSize: 36 }}>
-            배우
+            좋아한 배우
           </h1>
           <div style={{ marginTop: 8, fontSize: 14, color: 'var(--text-muted)' }}>
-            영화에 출연한 배우들 · 좋았던 배우는 ❤로 기억해두세요
+            영화 상세에서 ❤를 누른 배우만 모여있어요
           </div>
         </div>
         <div style={{ display: 'flex', gap: 48, paddingBottom: 4 }}>
-          <Stat value={totalActors} label="총 배우" />
           <Stat value={likedCount} label="좋아한 배우" />
         </div>
       </div>
@@ -197,7 +186,7 @@ export function ActorsPage() {
             />
           </div>
           <div style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-            {visible.length} / {totalActors}명
+            {visible.length}명
           </div>
         </div>
       </div>
@@ -312,7 +301,7 @@ function ActorsEmpty({ onCta }: { onCta: () => void }) {
       </div>
       <div style={{ maxWidth: 420 }}>
         <h2 className="t-h2" style={{ margin: 0, color: 'var(--text)' }}>
-          아직 기록한 배우가 없습니다
+          좋아한 배우가 아직 없어요
         </h2>
         <div
           style={{
@@ -322,8 +311,8 @@ function ActorsEmpty({ onCta }: { onCta: () => void }) {
             color: 'var(--text-muted)',
           }}
         >
-          영화를 기록하면 출연 배우가 자동으로 모입니다. 좋았던 배우에게 ❤를 남겨두면
-          이 페이지에서 한눈에 찾을 수 있어요.
+          영화 상세 페이지의 출연 배우 카드에서 ❤를 눌러보세요.
+          좋아한 배우들만 이곳에 모여서, "그 배우 누구였더라" 할 때 한눈에 찾을 수 있어요.
         </div>
       </div>
       <button
