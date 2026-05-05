@@ -4,7 +4,8 @@
 import type { MovieEntry } from '../types';
 
 export async function pullEntries(syncUrl: string, syncToken: string): Promise<MovieEntry[]> {
-  const res = await fetch(`${syncUrl}/entries`, {
+  const base = syncUrl.replace(/\/+$/, '');
+  const res = await fetch(`${base}/entries`, {
     headers: { Authorization: `Bearer ${syncToken}` },
     signal: AbortSignal.timeout(10_000),
   });
@@ -17,7 +18,8 @@ export async function pushEntries(
   syncToken: string,
   entries: MovieEntry[],
 ): Promise<void> {
-  const res = await fetch(`${syncUrl}/entries`, {
+  const base = syncUrl.replace(/\/+$/, '');
+  const res = await fetch(`${base}/entries`, {
     method: 'PUT',
     headers: {
       Authorization: `Bearer ${syncToken}`,
