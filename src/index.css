@@ -267,12 +267,12 @@ textarea.input { resize: none; line-height: 1.6; }
   .stats-grid { grid-template-columns: 1fr; }
 }
 
-/* Mobile: full-screen modal. */
+/* Mobile: full-screen modal. dvh excludes iOS Safari toolbar. */
 @media (max-width: 480px) {
   .movie-modal {
     width: 100vw !important;
-    height: 100vh !important;
-    max-height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
     border-radius: 0 !important;
     border: none !important;
     top: 0 !important;

@@ -447,7 +447,7 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
           borderRadius: 8,
           border: '1px solid var(--rule-strong)',
           boxShadow: '0 30px 80px rgba(0,0,0,0.6)',
-          maxHeight: 'calc(100vh - 120px)',
+          maxHeight: 'calc(100dvh - 120px)',
           display: 'flex',
           flexDirection: 'column',
           overflow: 'hidden',
@@ -554,72 +554,63 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
             />
           </div>
 
-          {/* Field 2/3 — date + rating */}
-          <div
-            className="modal-date-rating-grid"
-            style={{
-              marginTop: 18,
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 18,
-            }}
-          >
-            <div>
-              <label
-                htmlFor="movie-modal-watched"
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: 'var(--text)',
-                  display: 'block',
-                  marginBottom: 8,
-                }}
-              >
-                본 날짜 <span style={{ color: 'var(--accent)' }}>*</span>
-              </label>
-              <input
-                id="movie-modal-watched"
-                className="input"
-                type="date"
-                value={draft.watched}
-                onChange={(e) => patch({ watched: e.target.value })}
-                style={{ fontSize: 14, fontWeight: 500 }}
+          {/* Field 2 — date */}
+          <div style={{ marginTop: 18 }}>
+            <label
+              htmlFor="movie-modal-watched"
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: 'var(--text)',
+                display: 'block',
+                marginBottom: 8,
+              }}
+            >
+              본 날짜 <span style={{ color: 'var(--accent)' }}>*</span>
+            </label>
+            <input
+              id="movie-modal-watched"
+              className="input"
+              type="date"
+              value={draft.watched}
+              onChange={(e) => patch({ watched: e.target.value })}
+              style={{ fontSize: 14, fontWeight: 500 }}
+            />
+          </div>
+
+          {/* Field 3 — rating */}
+          <div style={{ marginTop: 14 }}>
+            <label
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                color: 'var(--text)',
+                display: 'block',
+                marginBottom: 8,
+              }}
+            >
+              별점 <span style={{ color: 'var(--accent)' }}>*</span>
+            </label>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 12,
+                padding: '10px 14px',
+                background: 'var(--bg-3)',
+                border: '1px solid var(--rule-strong)',
+                borderRadius: 'var(--radius-sm)',
+              }}
+            >
+              <StarInput
+                value={draft.rating}
+                onChange={(v) => patch({ rating: v })}
+                pixelSize={22}
               />
-            </div>
-            <div>
-              <label
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  color: 'var(--text)',
-                  display: 'block',
-                  marginBottom: 8,
-                }}
-              >
-                별점 <span style={{ color: 'var(--accent)' }}>*</span>
-              </label>
-              <div
-                className="input"
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 4,
-                  padding: '8px 14px',
-                }}
-              >
-                <StarInput
-                  value={draft.rating}
-                  onChange={(v) => patch({ rating: v })}
-                  pixelSize={16}
-                />
-                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>
-                  {draft.rating.toFixed(1)}{' '}
-                  <span style={{ color: 'var(--text-faint)', fontWeight: 400, fontSize: 11 }}>
-                    / 5
-                  </span>
-                </div>
-              </div>
+              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent)', whiteSpace: 'nowrap' }}>
+                {draft.rating.toFixed(1)}
+                <span style={{ color: 'var(--text-faint)', fontWeight: 400, fontSize: 12 }}> / 5</span>
+              </span>
             </div>
           </div>
 
