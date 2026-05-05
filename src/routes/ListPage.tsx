@@ -420,6 +420,7 @@ function ListBody({
               onSelect(entry.id);
             }
           }}
+          className="list-row"
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 140px 100px 110px',
@@ -460,8 +461,8 @@ function ListBody({
               </div>
             </div>
           </div>
-          <Stars rating={entry.rating} pixelSize={13} gap={1} />
-          <div style={{ fontSize: 12, color: 'var(--text-faint)', textAlign: 'right' }}>
+          <div className="list-col-rating"><Stars rating={entry.rating} pixelSize={13} gap={1} /></div>
+          <div className="list-col-runtime" style={{ fontSize: 12, color: 'var(--text-faint)', textAlign: 'right' }}>
             {entry.runtime ? `${Math.floor(entry.runtime / 60)}시간 ${entry.runtime % 60}분` : ''}
           </div>
           <div

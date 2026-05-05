@@ -239,6 +239,13 @@ textarea.input { resize: none; line-height: 1.6; }
 @media (max-width: 1023px) { .page-pad { padding-left: 32px !important; padding-right: 32px !important; } }
 @media (max-width: 767px)  { .page-pad { padding-left: 20px !important; padding-right: 20px !important; } }
 
+/* List view — hide rating/runtime on mobile, simplify to 2 columns */
+@media (max-width: 640px) {
+  .list-row { grid-template-columns: 1fr 100px !important; gap: 10px !important; }
+  .list-col-rating { display: none; }
+  .list-col-runtime { display: none; }
+}
+
 /* Hero h1 — readable scale on phone. */
 @media (max-width: 767px) {
   .hero-title { font-size: 28px !important; }
