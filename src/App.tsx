@@ -13,7 +13,14 @@
 // MovieModal sits *outside* of <Routes> so it can render on top of any page —
 // it reads ?modal=new|edit from useSearchParams and decides what to do.
 
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+
+function ScrollToTop() {
+  const { pathname } = useLocation();
+  useEffect(() => { window.scrollTo(0, 0); }, [pathname]);
+  return null;
+}
 import { MovieModal } from './components/modal/MovieModal';
 import { TmdbKeyOnboarding } from './components/modal/TmdbKeyOnboarding';
 import { ActorDetailPage } from './routes/ActorDetailPage';
@@ -33,6 +40,7 @@ function App() {
   return (
     <BrowserRouter basename={basename}>
       <MoviesProvider>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<ListPage filter="all" />} />
           <Route path="/year/:year" element={<ListPage filter="year" />} />
