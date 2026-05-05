@@ -120,9 +120,11 @@ export function SettingsPage() {
       dispatch({ type: 'load', payload: { ...state, entries: merged } });
       await pushEntries(url, token, merged);
       setSyncStatus('ok');
+      setTimeout(() => setSyncStatus('idle'), 3000);
     } catch (err) {
       console.error('[sync] manual sync failed', err);
       setSyncStatus('error');
+      setTimeout(() => setSyncStatus('idle'), 5000);
     }
   }, [syncUrlDraft, syncTokenDraft, entries, state, dispatch]);
 
@@ -395,10 +397,18 @@ export function SettingsPage() {
                 {syncStatus === 'syncing' ? '동기화 중…' : '지금 동기화'}
               </button>
               {syncStatus === 'ok' && (
-                <span style={{ fontSize: 12, color: 'var(--accent)' }}>✓ 동기화 완료</span>
+                <span style={{
+                  fontSize: 13, fontWeight: 600, color: 'var(--accent)',
+                  background: 'rgba(98,210,111,0.12)', padding: '6px 12px',
+                  borderRadius: 'var(--radius-sm)', border: '1px solid rgba(98,210,111,0.3)',
+                }}>✓ 동기화 완료</span>
               )}
               {syncStatus === 'error' && (
-                <span style={{ fontSize: 12, color: '#ff8a8a' }}>연결 실패 — URL·토큰을 확인해주세요</span>
+                <span style={{
+                  fontSize: 13, fontWeight: 600, color: '#ff8a8a',
+                  background: 'rgba(255,130,130,0.10)', padding: '6px 12px',
+                  borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,130,130,0.3)',
+                }}>연결 실패 — URL·토큰을 확인해주세요</span>
               )}
             </div>
             {settings.syncUrl && (
