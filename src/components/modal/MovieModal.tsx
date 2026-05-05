@@ -602,20 +602,21 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
                 className="input"
                 style={{
                   display: 'flex',
+                  flexDirection: 'column',
                   alignItems: 'center',
-                  justifyContent: 'space-between',
+                  gap: 4,
                   padding: '8px 14px',
                 }}
               >
                 <StarInput
                   value={draft.rating}
                   onChange={(v) => patch({ rating: v })}
-                  pixelSize={20}
+                  pixelSize={16}
                 />
-                <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--accent)' }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)' }}>
                   {draft.rating.toFixed(1)}{' '}
-                  <span style={{ color: 'var(--text-faint)', fontWeight: 400, fontSize: 12 }}>
-                    {' '}/ 5
+                  <span style={{ color: 'var(--text-faint)', fontWeight: 400, fontSize: 11 }}>
+                    / 5
                   </span>
                 </div>
               </div>
