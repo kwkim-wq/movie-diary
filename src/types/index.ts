@@ -33,6 +33,10 @@ export interface Settings {
   sort: SortKey;
   /** Grid vs list rendering on the list page. */
   view: ViewMode;
+  /** EC2 sync server base URL, e.g. "https://diary.barybody-ai.xyz". Empty = sync disabled. */
+  syncUrl: string;
+  /** Bearer token for the sync API. */
+  syncToken: string;
 }
 
 /**

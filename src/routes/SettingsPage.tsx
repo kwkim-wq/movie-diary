@@ -7,7 +7,7 @@
 // actions; the destructive path goes through dispatch({ type: 'importState' })
 // with a fresh defaultState().
 
-import { useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppHeader, type NavKey } from '../components/AppHeader';
 import { useMovies } from '../hooks/useMovies';
@@ -18,6 +18,7 @@ import {
   getStorageUsage,
   importJSON,
 } from '../lib/storage';
+import { pullEntries, pushEntries, mergeEntries } from '../lib/sync';
 
 /** Mask the TMDB key for display: first 4 + ellipsis + last 8. */
 function maskKey(raw: string): string {
@@ -93,10 +94,37 @@ function Section({ kicker, title, description, children, tone = 'default' }: Sec
 
 export function SettingsPage() {
   const navigate = useNavigate();
-  const { state, settings, entries, dispatch, hydrated } = useMovies();
+  const { state, settings, entries, dispatch, hydrated, setSetting } = useMovies();
   const fileInputRef = useRef<HTMLInputElement>(null);
   // Forces the storage usage stat to recompute after a destructive/import action.
   const [usageTick, setUsageTick] = useState(0);
+
+  const [syncUrlDraft, setSyncUrlDraft] = useState(() => settings.syncUrl ?? '');
+  const [syncTokenDraft, setSyncTokenDraft] = useState(() => settings.syncToken ?? '');
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'ok' | 'error'>('idle');
+
+  const handleSaveSync = useCallback(() => {
+    setSetting('syncUrl', syncUrlDraft.trim());
+    setSetting('syncToken', syncTokenDraft.trim());
+    setSyncStatus('idle');
+  }, [setSetting, syncUrlDraft, syncTokenDraft]);
+
+  const handleManualSync = useCallback(async () => {
+    const url = syncUrlDraft.trim();
+    const token = syncTokenDraft.trim();
+    if (!url || !token) return;
+    setSyncStatus('syncing');
+    try {
+      const remote = await pullEntries(url, token);
+      const merged = mergeEntries(entries, remote);
+      dispatch({ type: 'load', payload: { ...state, entries: merged } });
+      await pushEntries(url, token, merged);
+      setSyncStatus('ok');
+    } catch (err) {
+      console.error('[sync] manual sync failed', err);
+      setSyncStatus('error');
+    }
+  }, [syncUrlDraft, syncTokenDraft, entries, state, dispatch]);
 
   const usage = useMemo(() => getStorageUsage(), [
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -305,7 +333,83 @@ export function SettingsPage() {
           </div>
         </Section>
 
-        {/* 2. 데이터 */}
+        {/* 2. 기기간 동기화 */}
+        <Section
+          kicker="기기간 동기화"
+          title="서버 동기화"
+          description="EC2 서버 URL과 토큰을 입력하면 아이폰·다른 기기에서 같은 데이터를 사용할 수 있습니다."
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <label style={{ fontSize: 12, color: 'var(--text-muted)' }}>서버 URL</label>
+              <input
+                type="url"
+                value={syncUrlDraft}
+                onChange={(e) => setSyncUrlDraft(e.target.value)}
+                placeholder="https://diary.barybody-ai.xyz"
+                style={{
+                  background: 'var(--bg-3)',
+                  border: '1px solid var(--rule)',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '8px 12px',
+                  color: 'var(--text)',
+                  fontSize: 13,
+                  fontFamily: 'Inter, monospace',
+                  outline: 'none',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              <label style={{ fontSize: 12, color: 'var(--text-muted)' }}>토큰</label>
+              <input
+                type="password"
+                value={syncTokenDraft}
+                onChange={(e) => setSyncTokenDraft(e.target.value)}
+                placeholder="Bearer token"
+                style={{
+                  background: 'var(--bg-3)',
+                  border: '1px solid var(--rule)',
+                  borderRadius: 'var(--radius-sm)',
+                  padding: '8px 12px',
+                  color: 'var(--text)',
+                  fontSize: 13,
+                  fontFamily: 'Inter, monospace',
+                  outline: 'none',
+                  width: '100%',
+                  boxSizing: 'border-box',
+                }}
+              />
+            </div>
+            <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+              <button type="button" className="btn-primary" onClick={handleSaveSync}>
+                저장
+              </button>
+              <button
+                type="button"
+                className="btn-ghost"
+                onClick={handleManualSync}
+                disabled={!syncUrlDraft.trim() || !syncTokenDraft.trim() || syncStatus === 'syncing'}
+              >
+                {syncStatus === 'syncing' ? '동기화 중…' : '지금 동기화'}
+              </button>
+              {syncStatus === 'ok' && (
+                <span style={{ fontSize: 12, color: 'var(--accent)' }}>✓ 동기화 완료</span>
+              )}
+              {syncStatus === 'error' && (
+                <span style={{ fontSize: 12, color: '#ff8a8a' }}>연결 실패 — URL·토큰을 확인해주세요</span>
+              )}
+            </div>
+            {settings.syncUrl && (
+              <div style={{ fontSize: 11, color: 'var(--text-faint)' }}>
+                현재 저장된 서버: {settings.syncUrl}
+              </div>
+            )}
+          </div>
+        </Section>
+
+        {/* 3. 데이터 */}
         <Section
           kicker="데이터"
           title="백업과 복원"
@@ -391,7 +495,7 @@ export function SettingsPage() {
           </div>
         </Section>
 
-        {/* 3. 위험 */}
+        {/* 4. 위험 */}
         <Section
           kicker="DANGER ZONE"
           title="모든 데이터 지우기"

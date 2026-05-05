@@ -16,6 +16,8 @@ export function defaultState(): AppState {
       tmdbKey: '',
       sort: 'recent',
       view: 'grid',
+      syncUrl: '',
+      syncToken: '',
     },
     entries: [],
   };

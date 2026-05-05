@@ -1,9 +1,10 @@
 // MoviesContext — single source of truth for entries + settings.
 // On mount we hydrate from localStorage; every state change is auto-persisted.
 
-import { createContext, useEffect, useMemo, useReducer, type ReactNode } from 'react';
+import { createContext, useEffect, useMemo, useReducer, useRef, type ReactNode } from 'react';
 import type { AppState, MovieEntry, Settings } from '../types';
 import { defaultState, loadState, saveState } from '../lib/storage';
+import { mergeEntries, pullEntries, pushEntries } from '../lib/sync';
 
 /** All actions the reducer understands. */
 export type MoviesAction =
@@ -123,6 +124,44 @@ export function MoviesProvider({ children }: { children: ReactNode }) {
       // saveState already logs; swallow here so React doesn't blow up the tree.
     }
   }, [state, hydrated]);
+
+  // On first hydration: pull from sync server and merge.
+  const didPullRef = useRef(false);
+  useEffect(() => {
+    if (!hydrated || didPullRef.current) return;
+    didPullRef.current = true;
+    const { syncUrl, syncToken } = state.settings;
+    if (!syncUrl || !syncToken) return;
+    pullEntries(syncUrl.trim(), syncToken.trim())
+      .then((remote) => {
+        // Capture current entries via a fresh loadState to avoid stale closure.
+        const current = loadState();
+        const merged = mergeEntries(current.entries, remote);
+        const changed =
+          merged.length !== current.entries.length ||
+          merged.some((m) => {
+            const loc = current.entries.find((e) => e.id === m.id);
+            return !loc || loc.updatedAt !== m.updatedAt;
+          });
+        if (changed) {
+          dispatch({ type: 'load', payload: { ...current, entries: merged } });
+        }
+      })
+      .catch((err) => console.warn('[sync] pull failed', err));
+  }, [hydrated]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // After every entries change: push to sync server (debounced 1.5 s).
+  useEffect(() => {
+    if (!hydrated) return;
+    const { syncUrl, syncToken } = state.settings;
+    if (!syncUrl || !syncToken) return;
+    const timer = setTimeout(() => {
+      pushEntries(syncUrl.trim(), syncToken.trim(), state.entries).catch((err) =>
+        console.warn('[sync] push failed', err),
+      );
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [state.entries, state.settings, hydrated]);
 
   const value = useMemo<MoviesContextValue>(
     () => ({ state, dispatch, hydrated }),
