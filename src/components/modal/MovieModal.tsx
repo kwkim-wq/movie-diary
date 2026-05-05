@@ -554,52 +554,47 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
             />
           </div>
 
-          {/* Field 2/3 — date + rating side by side */}
-          <div style={{ marginTop: 18, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-            <div>
-              <label
-                htmlFor="movie-modal-watched"
-                style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', display: 'block', marginBottom: 8 }}
-              >
-                본 날짜 <span style={{ color: 'var(--accent)' }}>*</span>
-              </label>
-              <input
-                id="movie-modal-watched"
-                className="input"
-                type="date"
-                value={draft.watched}
-                onChange={(e) => patch({ watched: e.target.value })}
-                style={{ fontSize: 14, fontWeight: 500 }}
-              />
-            </div>
-            <div>
-              <label
-                style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', display: 'block', marginBottom: 8 }}
-              >
-                별점 <span style={{ color: 'var(--accent)' }}>*</span>
-              </label>
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 8,
-                  padding: '10px 10px',
-                  background: 'var(--bg-3)',
-                  border: '1px solid var(--rule-strong)',
-                  borderRadius: 'var(--radius-sm)',
-                  height: '100%',
-                  maxHeight: 42,
-                }}
-              >
-                <StarInput
-                  value={draft.rating}
-                  onChange={(v) => patch({ rating: v })}
-                  pixelSize={16}
-                />
-                <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--accent)', whiteSpace: 'nowrap', flexShrink: 0 }}>
-                  {draft.rating.toFixed(1)}
-                </span>
-              </div>
+          {/* Field 2 — date */}
+          <div style={{ marginTop: 18 }}>
+            <label
+              htmlFor="movie-modal-watched"
+              style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', display: 'block', marginBottom: 8 }}
+            >
+              본 날짜 <span style={{ color: 'var(--accent)' }}>*</span>
+            </label>
+            <input
+              id="movie-modal-watched"
+              className="input"
+              type="date"
+              value={draft.watched}
+              onChange={(e) => patch({ watched: e.target.value })}
+              style={{ fontSize: 14, fontWeight: 500, textAlign: 'left' }}
+            />
+          </div>
+
+          {/* Field 3 — rating */}
+          <div style={{ marginTop: 14 }}>
+            <label
+              style={{ fontSize: 12, fontWeight: 600, color: 'var(--text)', display: 'block', marginBottom: 8 }}
+            >
+              별점 <span style={{ color: 'var(--accent)' }}>*</span>
+            </label>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                padding: '10px 14px',
+                background: 'var(--bg-3)',
+                border: '1px solid var(--rule-strong)',
+                borderRadius: 'var(--radius-sm)',
+              }}
+            >
+              <StarInput value={draft.rating} onChange={(v) => patch({ rating: v })} pixelSize={20} />
+              <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)', whiteSpace: 'nowrap' }}>
+                {draft.rating.toFixed(1)}
+                <span style={{ fontSize: 11, fontWeight: 400, color: 'var(--text-faint)' }}> / 5</span>
+              </span>
             </div>
           </div>
 
