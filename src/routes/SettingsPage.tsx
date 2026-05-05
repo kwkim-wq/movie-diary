@@ -357,7 +357,8 @@ export function SettingsPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <label style={{ fontSize: 12, color: 'var(--text-muted)' }}>서버 URL</label>
               <input
-                type="url"
+                type="text"
+                autoComplete="off"
                 value={syncUrlDraft}
                 onChange={(e) => setSyncUrlDraft(e.target.value)}
                 placeholder="https://diary.barybody-ai.xyz"
@@ -378,7 +379,8 @@ export function SettingsPage() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               <label style={{ fontSize: 12, color: 'var(--text-muted)' }}>토큰</label>
               <input
-                type="password"
+                type="text"
+                autoComplete="off"
                 value={syncTokenDraft}
                 onChange={(e) => setSyncTokenDraft(e.target.value)}
                 placeholder="Bearer token"
