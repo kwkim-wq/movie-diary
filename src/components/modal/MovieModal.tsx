@@ -556,6 +556,7 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
 
           {/* Field 2/3 — date + rating */}
           <div
+            className="modal-date-rating-grid"
             style={{
               marginTop: 18,
               display: 'grid',

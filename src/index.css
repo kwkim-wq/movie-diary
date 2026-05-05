@@ -246,6 +246,11 @@ textarea.input { resize: none; line-height: 1.6; }
   .list-col-runtime { display: none; }
 }
 
+/* Modal date+rating — stack vertically on mobile to prevent star overlap */
+@media (max-width: 640px) {
+  .modal-date-rating-grid { grid-template-columns: 1fr !important; }
+}
+
 /* Hero h1 — readable scale on phone. */
 @media (max-width: 767px) {
   .hero-title { font-size: 28px !important; }

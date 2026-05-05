@@ -171,7 +171,7 @@ export function TmdbAutocomplete({
             boxShadow: '0 16px 40px rgba(0,0,0,0.5)',
             zIndex: 5,
             overflow: 'hidden',
-            maxHeight: 360,
+            maxHeight: 'min(360px, 40dvh)',
             overflowY: 'auto',
           }}
         >
