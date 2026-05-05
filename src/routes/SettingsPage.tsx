@@ -120,7 +120,11 @@ export function SettingsPage() {
   const handleManualSync = useCallback(async () => {
     const url = syncUrlDraft.trim();
     const token = syncTokenDraft.trim();
-    if (!url || !token) return;
+    if (!url || !token) {
+      setSyncStatus('error');
+      setTimeout(() => setSyncStatus('idle'), 4000);
+      return;
+    }
     setSyncStatus('syncing');
     try {
       const remote = await pullEntries(url, token);
@@ -400,7 +404,7 @@ export function SettingsPage() {
                 type="button"
                 className="btn-ghost"
                 onClick={handleManualSync}
-                disabled={!syncUrlDraft.trim() || !syncTokenDraft.trim() || syncStatus === 'syncing'}
+                disabled={syncStatus === 'syncing'}
               >
                 {syncStatus === 'syncing' ? '동기화 중…' : '지금 동기화'}
               </button>
@@ -416,7 +420,11 @@ export function SettingsPage() {
                   fontSize: 13, fontWeight: 600, color: '#ff8a8a',
                   background: 'rgba(255,130,130,0.10)', padding: '6px 12px',
                   borderRadius: 'var(--radius-sm)', border: '1px solid rgba(255,130,130,0.3)',
-                }}>연결 실패 — URL·토큰을 확인해주세요</span>
+                }}>
+                  {!syncUrlDraft.trim() || !syncTokenDraft.trim()
+                    ? 'URL과 토큰을 입력 후 저장해주세요'
+                    : '연결 실패 — URL·토큰을 확인해주세요'}
+                </span>
               )}
             </div>
             {settings.syncUrl && (
