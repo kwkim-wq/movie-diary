@@ -163,6 +163,33 @@ export function MoviesProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(timer);
   }, [state.entries, state.settings, hydrated]);
 
+  // Poll every 30 s while the tab is visible — pull and merge remote changes.
+  useEffect(() => {
+    if (!hydrated) return;
+    const { syncUrl, syncToken } = state.settings;
+    if (!syncUrl || !syncToken) return;
+    const doPoll = () => {
+      if (document.visibilityState !== 'visible') return;
+      pullEntries(syncUrl.trim(), syncToken.trim())
+        .then((remote) => {
+          const current = loadState();
+          const merged = mergeEntries(current.entries, remote);
+          const changed =
+            merged.length !== current.entries.length ||
+            merged.some((m) => {
+              const loc = current.entries.find((e) => e.id === m.id);
+              return !loc || loc.updatedAt !== m.updatedAt;
+            });
+          if (changed) {
+            dispatch({ type: 'load', payload: { ...current, entries: merged } });
+          }
+        })
+        .catch(() => {/* silent — polling failures are non-critical */});
+    };
+    const id = setInterval(doPoll, 30_000);
+    return () => clearInterval(id);
+  }, [hydrated, state.settings]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const value = useMemo<MoviesContextValue>(
     () => ({ state, dispatch, hydrated }),
     [state, hydrated],
