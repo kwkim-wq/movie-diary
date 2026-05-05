@@ -7,7 +7,7 @@
 // actions; the destructive path goes through dispatch({ type: 'importState' })
 // with a fresh defaultState().
 
-import { useMemo, useRef, useState, useCallback } from 'react';
+import { useMemo, useRef, useState, useCallback, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppHeader, type NavKey } from '../components/AppHeader';
 import { useMovies } from '../hooks/useMovies';
@@ -99,9 +99,17 @@ export function SettingsPage() {
   // Forces the storage usage stat to recompute after a destructive/import action.
   const [usageTick, setUsageTick] = useState(0);
 
-  const [syncUrlDraft, setSyncUrlDraft] = useState(() => settings.syncUrl ?? '');
-  const [syncTokenDraft, setSyncTokenDraft] = useState(() => settings.syncToken ?? '');
+  const [syncUrlDraft, setSyncUrlDraft] = useState('');
+  const [syncTokenDraft, setSyncTokenDraft] = useState('');
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'ok' | 'error'>('idle');
+
+  // hydration 완료 후 localStorage에서 로드된 값으로 draft 초기화
+  useEffect(() => {
+    if (!hydrated) return;
+    setSyncUrlDraft(settings.syncUrl ?? '');
+    setSyncTokenDraft(settings.syncToken ?? '');
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hydrated]);
 
   const handleSaveSync = useCallback(() => {
     setSetting('syncUrl', syncUrlDraft.trim());
