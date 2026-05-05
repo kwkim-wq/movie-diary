@@ -66,111 +66,101 @@ export function AppHeader({
           minHeight: 80,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          flexWrap: 'wrap',
           gap: 24,
         }}
       >
+        {/* Logo */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 32,
-            minWidth: 0,
-            flex: '1 1 auto',
+            gap: 10,
+            flexShrink: 0,
+            cursor: onBrandClick ? 'pointer' : 'default',
+          }}
+          onClick={onBrandClick}
+          role={onBrandClick ? 'button' : undefined}
+          tabIndex={onBrandClick ? 0 : undefined}
+          onKeyDown={(e) => {
+            if (!onBrandClick) return;
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onBrandClick();
+            }
           }}
         >
-          {/* Logo */}
+          <svg
+            width="22"
+            height="22"
+            viewBox="0 0 1024 1024"
+            style={{ flexShrink: 0, display: 'block' }}
+            aria-hidden="true"
+          >
+            <rect width="1024" height="1024" rx="224" ry="224" fill="var(--bg)" />
+            <path
+              d="M512 168 L613 386 L848 416 L675 580 L719 814 L512 700 L305 814 L349 580 L176 416 L411 386 Z"
+              fill="var(--accent)"
+            />
+            <path d="M452 432 L452 624 L612 528 Z" fill="var(--bg)" />
+          </svg>
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              flexShrink: 0,
-              cursor: onBrandClick ? 'pointer' : 'default',
-            }}
-            onClick={onBrandClick}
-            role={onBrandClick ? 'button' : undefined}
-            tabIndex={onBrandClick ? 0 : undefined}
-            onKeyDown={(e) => {
-              if (!onBrandClick) return;
-              if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                onBrandClick();
-              }
+              fontSize: 16,
+              fontWeight: 700,
+              letterSpacing: '-0.01em',
+              whiteSpace: 'nowrap',
             }}
           >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 1024 1024"
-              style={{ flexShrink: 0, display: 'block' }}
-              aria-hidden="true"
-            >
-              <rect width="1024" height="1024" rx="224" ry="224" fill="var(--bg)" />
-              <path
-                d="M512 168 L613 386 L848 416 L675 580 L719 814 L512 700 L305 814 L349 580 L176 416 L411 386 Z"
-                fill="var(--accent)"
-              />
-              <path d="M452 432 L452 624 L612 528 Z" fill="var(--bg)" />
-            </svg>
-            <div
-              style={{
-                fontSize: 16,
-                fontWeight: 700,
-                letterSpacing: '-0.01em',
-                whiteSpace: 'nowrap',
-              }}
-            >
-              Movie Diary
-            </div>
+            Movie Diary
           </div>
-
-          {/* Nav — scroll horizontally when the row is too narrow. */}
-          {showNav && (
-            <nav className="nav-scroller" aria-label="주 메뉴">
-              {NAV_ITEMS.map(({ key, label }) => {
-                const active = key === activeNav;
-                return (
-                  <div
-                    key={key}
-                    role={onNavClick ? 'button' : undefined}
-                    tabIndex={onNavClick ? 0 : undefined}
-                    onClick={() => onNavClick?.(key)}
-                    onKeyDown={(e) => {
-                      if (!onNavClick) return;
-                      if (e.key === 'Enter' || e.key === ' ') {
-                        e.preventDefault();
-                        onNavClick(key);
-                      }
-                    }}
-                    style={{
-                      fontSize: 13,
-                      fontWeight: 500,
-                      color: active ? 'var(--text)' : 'var(--text-muted)',
-                      cursor: onNavClick ? 'pointer' : 'default',
-                      padding: '4px 0',
-                      borderBottom: active
-                        ? '2px solid var(--accent)'
-                        : '2px solid transparent',
-                      whiteSpace: 'nowrap',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {label}
-                  </div>
-                );
-              })}
-            </nav>
-          )}
         </div>
+
+        {/* Nav — flex: 1 on desktop (fills middle), full-width row on mobile */}
+        {showNav && (
+          <nav className="nav-scroller" aria-label="주 메뉴">
+            {NAV_ITEMS.map(({ key, label }) => {
+              const active = key === activeNav;
+              return (
+                <div
+                  key={key}
+                  role={onNavClick ? 'button' : undefined}
+                  tabIndex={onNavClick ? 0 : undefined}
+                  onClick={() => onNavClick?.(key)}
+                  onKeyDown={(e) => {
+                    if (!onNavClick) return;
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      onNavClick(key);
+                    }
+                  }}
+                  style={{
+                    fontSize: 13,
+                    fontWeight: 500,
+                    color: active ? 'var(--text)' : 'var(--text-muted)',
+                    cursor: onNavClick ? 'pointer' : 'default',
+                    padding: '4px 0',
+                    borderBottom: active
+                      ? '2px solid var(--accent)'
+                      : '2px solid transparent',
+                    whiteSpace: 'nowrap',
+                    flexShrink: 0,
+                  }}
+                >
+                  {label}
+                </div>
+              );
+            })}
+          </nav>
+        )}
 
         {/* Right side */}
         {rightSlot ? (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, marginLeft: 'auto' }}>
             {rightSlot}
           </div>
         ) : (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexShrink: 0, marginLeft: 'auto' }}>
             {showSearch && (
               <div className="header-search" style={{ position: 'relative', width: 240 }}>
                 <svg

@@ -202,10 +202,11 @@ textarea.input { resize: none; line-height: 1.6; }
 .nav-scroller {
   display: flex;
   gap: 22px;
-  flex-shrink: 1;
+  flex: 1 1 auto;
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
+  min-width: 0;
 }
 .nav-scroller::-webkit-scrollbar { display: none; height: 0; }
 
@@ -213,8 +214,20 @@ textarea.input { resize: none; line-height: 1.6; }
 .app-header-bar { padding: 20px 56px; }
 @media (max-width: 1023px) { .app-header-bar { padding: 18px 32px; } }
 @media (max-width: 767px)  { .app-header-bar { padding: 16px 20px; gap: 12px; } }
+@media (max-width: 640px)  {
+  /* Nav goes to its own full-width row below logo+right */
+  .nav-scroller {
+    order: 3;
+    flex-basis: 100%;
+    padding-bottom: 12px;
+    border-top: 1px solid var(--rule);
+    padding-top: 10px;
+    gap: 20px;
+  }
+  .app-header-bar { min-height: auto !important; padding-bottom: 0; }
+}
 @media (max-width: 480px)  {
-  .app-header-bar .header-search { width: 160px; }
+  .app-header-bar .header-search { width: 140px; }
   .app-header-bar .header-create-label { display: none; }
 }
 
