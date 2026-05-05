@@ -14,12 +14,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTmdbSearch } from '../../hooks/useTmdbSearch';
 import { posterUrl } from '../../lib/tmdb';
-import { TmdbAuthError, type TmdbSearchResult } from '../../types';
+import { TmdbAuthError, type TmdbMultiResult } from '../../types';
 
 interface TmdbAutocompleteProps {
   value: string;
   onChange: (value: string) => void;
-  onSelect: (hit: TmdbSearchResult) => void;
+  onSelect: (hit: TmdbMultiResult) => void;
   /** TMDB API key. Empty string disables network calls. */
   tmdbKey: string;
   /** Optional manual-input fallback (when TMDB returns nothing). */
@@ -111,8 +111,8 @@ export function TmdbAutocomplete({
         }}
         onKeyDown={handleKeyDown}
         onFocus={() => setOpen(true)}
-        placeholder="영화 제목 검색…"
-        aria-label="영화 제목"
+        placeholder="영화 또는 TV 제목 검색…"
+        aria-label="영화 또는 TV 제목"
         aria-autocomplete="list"
         aria-expanded={showDropdown}
         style={{
@@ -306,8 +306,11 @@ export function TmdbAutocomplete({
                       )}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>
-                        {s.title || s.originalTitle}
+                      <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)', display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 4 }}>
+                        <span>{s.title || s.originalTitle}</span>
+                        <span style={{ fontSize: 10, padding: '1px 5px', borderRadius: 3, background: 'var(--bg-3)', color: 'var(--text-muted)', marginLeft: 4 }}>
+                          {s.mediaType === 'tv' ? 'TV' : '영화'}
+                        </span>
                         {s.originalTitle && s.originalTitle !== s.title && (
                           <span
                             style={{
@@ -317,7 +320,6 @@ export function TmdbAutocomplete({
                               fontSize: 12,
                             }}
                           >
-                            {' '}
                             · {s.originalTitle}
                           </span>
                         )}

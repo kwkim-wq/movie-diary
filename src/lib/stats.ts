@@ -134,9 +134,20 @@ export function getTopGenres(entries: MovieEntry[], limit = 5): CountedItem[] {
 export function getTopDirectors(entries: MovieEntry[], limit = 5): CountedItem[] {
   const map = new Map<string, number>();
   for (const e of entries) {
-    const name = (e.director ?? '').trim();
-    if (!name) continue;
-    map.set(name, (map.get(name) ?? 0) + 1);
+    if (e.mediaType === 'tv' && Array.isArray(e.creators) && e.creators.length > 0) {
+      // TV entries: aggregate creators[] instead of director string
+      const seen = new Set<string>();
+      for (const creator of e.creators) {
+        const name = creator.trim();
+        if (!name || seen.has(name)) continue;
+        seen.add(name);
+        map.set(name, (map.get(name) ?? 0) + 1);
+      }
+    } else {
+      const name = (e.director ?? '').trim();
+      if (!name) continue;
+      map.set(name, (map.get(name) ?? 0) + 1);
+    }
   }
   return topN(map, limit);
 }

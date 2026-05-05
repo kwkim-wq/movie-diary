@@ -86,6 +86,8 @@ export interface MovieEntry {
   id: string;
   /** TMDB movie id. Optional because the user can also create a manual entry. */
   tmdbId: number | null;
+  /** Whether this entry is a movie or a TV show. */
+  mediaType: 'movie' | 'tv';
   /** Korean title (or whatever language the user typed). */
   title: string;
   /** Original/English title from TMDB. */
@@ -117,6 +119,12 @@ export interface MovieEntry {
    * (older v1 entries are migrated to `[]` on load — see lib/storage.ts).
    */
   cast: CastMember[];
+  /** TV only — number of seasons. */
+  seasonCount?: number;
+  /** TV only — total episode count. */
+  episodeCount?: number;
+  /** TV only — showrunner / creator names. */
+  creators?: string[];
   /** ISO 8601 — when the entry was first created. */
   createdAt: string;
   /** ISO 8601 — last modification. */
@@ -151,6 +159,26 @@ export interface TmdbSearchResult {
   genres: string[];
   /** Original `overview` text — handy for tooltips. */
   overview: string;
+}
+
+/** A single hit from `/search/multi` — covers both movies and TV shows. */
+export interface TmdbMultiResult {
+  id: number;
+  mediaType: 'movie' | 'tv';
+  title: string;
+  originalTitle: string;
+  year: number;
+  posterPath: string | null;
+  genres: string[];
+  overview: string;
+}
+
+/** Full TV show detail from `/tv/:id`. */
+export interface TmdbTvDetails extends TmdbMultiResult {
+  runtime: number;      // episode_run_time[0] ?? 0
+  creators: string[];   // created_by[].name
+  seasonCount: number;  // number_of_seasons
+  episodeCount: number; // number_of_episodes
 }
 
 /** Full detail bundle from `/movie/:id?append_to_response=credits`. */
@@ -202,6 +230,7 @@ export interface MovieDraft {
   title: string;
   originalTitle: string;
   tmdbId: number | null;
+  mediaType: 'movie' | 'tv';
   year: number;
   runtime: number;
   director: string;
@@ -214,6 +243,12 @@ export interface MovieDraft {
   liked: boolean;
   /** Cast prefilled from TMDB credits when the user picked an autocomplete row. */
   cast: CastMember[];
+  /** TV only — showrunner / creator names. */
+  creators?: string[];
+  /** TV only — number of seasons. */
+  seasonCount?: number;
+  /** TV only — total episode count. */
+  episodeCount?: number;
   /** UTC timestamp the draft was last saved. */
   savedAt: string;
 }

@@ -8,19 +8,19 @@
 //   error   : TmdbAuthError / TmdbNetworkError / TmdbRateLimitError | null
 
 import { useEffect, useState } from 'react';
-import { searchMovies } from '../lib/tmdb';
-import { TmdbAuthError, type TmdbSearchResult } from '../types';
+import { searchMulti } from '../lib/tmdb';
+import { TmdbAuthError, type TmdbMultiResult } from '../types';
 import { useDebounce } from './useDebounce';
 
 interface UseTmdbSearchResult {
-  results: TmdbSearchResult[];
+  results: TmdbMultiResult[];
   loading: boolean;
   error: Error | null;
 }
 
 export function useTmdbSearch(query: string, key: string): UseTmdbSearchResult {
   const debounced = useDebounce(query, 250);
-  const [results, setResults] = useState<TmdbSearchResult[]>([]);
+  const [results, setResults] = useState<TmdbMultiResult[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
@@ -43,7 +43,7 @@ export function useTmdbSearch(query: string, key: string): UseTmdbSearchResult {
     setLoading(true);
     setError(null);
 
-    searchMovies(trimmed, key, { signal: ctrl.signal })
+    searchMulti(trimmed, key, { signal: ctrl.signal })
       .then((rows) => {
         setResults(rows);
         setLoading(false);

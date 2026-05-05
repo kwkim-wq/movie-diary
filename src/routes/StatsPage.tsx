@@ -101,7 +101,7 @@ export function StatsPage() {
         </div>
         {!isEmpty && (
           <div className="hero-stats" style={{ display: 'flex', gap: 48, paddingBottom: 4, flexWrap: 'wrap' }}>
-            <HeroStat value={totals.count} label="총 영화" />
+            <HeroStat value={totals.count} label="총 작품" />
             <HeroStat value={formatRuntime(totals.totalRuntime)} label="총 시청 시간" />
             <HeroStat
               value={
@@ -140,7 +140,7 @@ export function StatsPage() {
             <StatCard title="장르 분포" subtitle="가장 많이 본 장르 Top 5">
               <HorizontalBars data={genres} emptyLabel="장르 정보 없음" />
             </StatCard>
-            <StatCard title="가장 많이 본 감독" subtitle="Top 5">
+            <StatCard title="감독·창작자 TOP 5" subtitle="Top 5">
               <DirectorRanking data={directors} />
             </StatCard>
             <StatCard title="개봉 연대 분포" subtitle="기록한 영화의 제작 연대">

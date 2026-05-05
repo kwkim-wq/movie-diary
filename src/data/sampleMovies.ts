@@ -179,6 +179,7 @@ function buildEntry(raw: RawSample): MovieEntry {
   return {
     id: entryId(watchedISO, raw.title, 1),
     tmdbId: raw.tmdbId,
+    mediaType: 'movie',
     title: raw.title,
     originalTitle: raw.originalTitle,
     year: raw.year,

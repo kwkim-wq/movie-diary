@@ -29,8 +29,9 @@ const KOREAN_TIME = new Intl.DateTimeFormat('ko-KR', {
 });
 const KOREAN_MONTH = new Intl.DateTimeFormat('ko-KR', { year: 'numeric', month: 'long' });
 
-function runtimeLabel(min: number): string {
+function runtimeLabel(min: number, isTv = false): string {
   if (!min || min <= 0) return '';
+  if (isTv) return `평균 에피소드 ${min}분`;
   const h = Math.floor(min / 60);
   const m = min % 60;
   if (h === 0) return `${m}분`;
@@ -346,14 +347,34 @@ export function DetailPage() {
                 columnGap: 24,
               }}
             >
-              {entry.director && <Stat label="감독" value={entry.director} />}
+              {entry.director && (
+                <Stat
+                  label={entry.mediaType === 'tv' ? '창작자' : '감독'}
+                  value={entry.director}
+                />
+              )}
               {entry.originalTitle && entry.originalTitle !== entry.title && (
                 <Stat label="원제" value={entry.originalTitle} />
               )}
               {entry.year > 0 && <Stat label="개봉 연도" value={`${entry.year}년`} />}
               {entry.runtime > 0 && (
-                <Stat label="러닝타임" value={runtimeLabel(entry.runtime)} />
+                <Stat
+                  label="러닝타임"
+                  value={runtimeLabel(entry.runtime, entry.mediaType === 'tv')}
+                />
               )}
+              {entry.mediaType === 'tv' &&
+                (entry.seasonCount != null || entry.episodeCount != null) && (
+                  <Stat
+                    label="시즌 / 에피소드"
+                    value={[
+                      entry.seasonCount != null ? `시즌 ${entry.seasonCount}` : null,
+                      entry.episodeCount != null ? `에피소드 ${entry.episodeCount}` : null,
+                    ]
+                      .filter(Boolean)
+                      .join(' · ')}
+                  />
+                )}
             </div>
           )}
 

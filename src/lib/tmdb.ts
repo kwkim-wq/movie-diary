@@ -19,7 +19,9 @@ import {
   TmdbRateLimitError,
   type TmdbCastMember,
   type TmdbMovieDetails,
+  type TmdbMultiResult,
   type TmdbSearchResult,
+  type TmdbTvDetails,
 } from '../types';
 
 const BASE = 'https://api.themoviedb.org/3';
@@ -32,6 +34,26 @@ interface CacheEntry {
 }
 
 const cache = new Map<string, CacheEntry>();
+
+/** Korean genre labels for TMDB TV genre ids. */
+export const TV_GENRE_MAP: Record<number, string> = {
+  10759: '액션·어드벤처',
+  16: '애니메이션',
+  35: '코미디',
+  80: '범죄',
+  99: '다큐멘터리',
+  18: '드라마',
+  10751: '가족',
+  10762: '어린이',
+  9648: '미스터리',
+  10763: '뉴스',
+  10764: '리얼리티',
+  10765: 'SF·판타지',
+  10766: '막장드라마',
+  10767: '토크쇼',
+  10768: '전쟁·정치',
+  37: '서부',
+};
 
 /** Korean genre labels for TMDB movie genre ids (snapshot of /genre/movie/list?language=ko-KR). */
 export const GENRE_MAP: Record<number, string> = {
@@ -59,6 +81,11 @@ export const GENRE_MAP: Record<number, string> = {
 export function mapGenreIds(ids: number[] | undefined): string[] {
   if (!ids || ids.length === 0) return [];
   return ids.map((id) => GENRE_MAP[id]).filter((g): g is string => Boolean(g));
+}
+
+export function mapTvGenreIds(ids: number[] | undefined): string[] {
+  if (!ids || ids.length === 0) return [];
+  return ids.map((id) => TV_GENRE_MAP[id] ?? GENRE_MAP[id]).filter((g): g is string => Boolean(g));
 }
 
 /** Build a TMDB poster URL. `path` MUST be the raw `/abc.jpg` from the API. */
@@ -232,6 +259,128 @@ export async function getMovieCredits(
       order: c.order ?? 9999,
     }));
   return { cast };
+}
+
+interface RawMultiSearchResponse {
+  results?: Array<{
+    id: number;
+    media_type?: string;
+    title?: string;
+    name?: string;
+    original_title?: string;
+    original_name?: string;
+    release_date?: string;
+    first_air_date?: string;
+    poster_path?: string | null;
+    genre_ids?: number[];
+    overview?: string;
+  }>;
+}
+
+/** `/search/multi` — returns up to 10 mixed movie+TV hits. */
+export async function searchMulti(
+  query: string,
+  key: string,
+  opts: FetchOptions = {},
+): Promise<TmdbMultiResult[]> {
+  const trimmed = query.trim();
+  if (!trimmed) return [];
+  const path = `/search/multi?query=${encodeURIComponent(trimmed)}&include_adult=false&page=1`;
+  const json = await tmdbFetch<RawMultiSearchResponse>(path, key, opts);
+  const results = (json.results ?? [])
+    .filter((r) => r.media_type === 'movie' || r.media_type === 'tv')
+    .slice(0, 10);
+  return results.map((r) => {
+    const isTv = r.media_type === 'tv';
+    return {
+      id: r.id,
+      mediaType: isTv ? 'tv' : 'movie',
+      title: (isTv ? r.name : r.title) ?? '',
+      originalTitle: (isTv ? r.original_name : r.original_title) ?? '',
+      year: (() => {
+        const dateStr = isTv ? r.first_air_date : r.release_date;
+        return dateStr ? Number(dateStr.slice(0, 4)) || 0 : 0;
+      })(),
+      posterPath: r.poster_path ?? null,
+      genres: isTv ? mapTvGenreIds(r.genre_ids) : mapGenreIds(r.genre_ids),
+      overview: r.overview ?? '',
+    };
+  });
+}
+
+interface RawTvDetailsResponse {
+  id: number;
+  name?: string;
+  original_name?: string;
+  first_air_date?: string;
+  poster_path?: string | null;
+  overview?: string;
+  genres?: Array<{ id: number; name: string }>;
+  episode_run_time?: number[];
+  created_by?: Array<{ id?: number; name?: string }>;
+  number_of_seasons?: number;
+  number_of_episodes?: number;
+}
+
+/** `/tv/:id?language=ko-KR` — full TV show detail. */
+export async function getTvDetails(
+  tvId: number,
+  key: string,
+  opts: FetchOptions = {},
+): Promise<TmdbTvDetails> {
+  const path = `/tv/${tvId}`;
+  const json = await tmdbFetch<RawTvDetailsResponse>(path, key, opts);
+  const genres = (json.genres ?? []).map((g) => g.name).filter(Boolean);
+  return {
+    id: json.id,
+    mediaType: 'tv',
+    title: json.name ?? '',
+    originalTitle: json.original_name ?? '',
+    year: json.first_air_date ? Number(json.first_air_date.slice(0, 4)) || 0 : 0,
+    posterPath: json.poster_path ?? null,
+    overview: json.overview ?? '',
+    genres,
+    runtime: (json.episode_run_time ?? [])[0] ?? 0,
+    creators: (json.created_by ?? []).map((c) => c.name ?? '').filter(Boolean),
+    seasonCount: json.number_of_seasons ?? 0,
+    episodeCount: json.number_of_episodes ?? 0,
+  };
+}
+
+interface RawAggregateCreditsResponse {
+  cast?: Array<{
+    id?: number;
+    name?: string;
+    roles?: Array<{ character?: string }>;
+    profile_path?: string | null;
+    order?: number;
+  }>;
+}
+
+/**
+ * `/tv/:id/aggregate_credits` — top-N cast for a TV show.
+ * Uses aggregate_credits which groups recurring roles across seasons.
+ */
+export async function getTvCredits(
+  tvId: number,
+  key: string,
+  opts: FetchOptions & { topN?: number } = {},
+): Promise<TmdbCastMember[]> {
+  const path = `/tv/${tvId}/aggregate_credits`;
+  const json = await tmdbFetch<RawAggregateCreditsResponse>(path, key, opts);
+  const topN = opts.topN ?? 8;
+  return (json.cast ?? [])
+    .filter((c) => typeof c.id === 'number')
+    .slice()
+    .sort((a, b) => (a.order ?? 9999) - (b.order ?? 9999))
+    .slice(0, topN)
+    .map<TmdbCastMember>((c) => ({
+      id: c.id as number,
+      name: c.name ?? '',
+      character: c.roles?.[0]?.character ?? '',
+      profilePath: c.profile_path ?? null,
+      order: c.order ?? 9999,
+    }));
 }
 
 /** TMDB profile image URL (built-in /t/p/<size> CDN). */

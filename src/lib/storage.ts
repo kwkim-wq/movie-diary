@@ -65,7 +65,7 @@ function migrateEntries(entries: MovieEntry[]): MovieEntry[] {
           .map(normalizeCastMember)
           .filter((c): c is CastMember => c !== null)
       : [];
-    return { ...e, cast };
+    return { ...e, cast, mediaType: (e as { mediaType?: unknown }).mediaType ?? 'movie' } as MovieEntry;
   });
 }
 

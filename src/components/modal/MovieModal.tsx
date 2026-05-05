@@ -20,8 +20,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useDraft } from '../../hooks/useDraft';
 import { useMovies } from '../../hooks/useMovies';
 import { entryId } from '../../lib/id';
-import { getMovieCredits, getMovieDetails } from '../../lib/tmdb';
-import type { CastMember, MovieDraft, MovieEntry, TmdbSearchResult } from '../../types';
+import { getMovieCredits, getMovieDetails, getTvCredits, getTvDetails } from '../../lib/tmdb';
+import type { CastMember, MovieDraft, MovieEntry, TmdbMultiResult } from '../../types';
 import { StarInput } from './StarInput';
 import { TagInput } from './TagInput';
 import { TmdbAutocomplete } from './TmdbAutocomplete';
@@ -42,6 +42,7 @@ function emptyDraft(): MovieDraft {
     title: '',
     originalTitle: '',
     tmdbId: null,
+    mediaType: 'movie',
     year: 0,
     runtime: 0,
     director: '',
@@ -53,6 +54,9 @@ function emptyDraft(): MovieDraft {
     tags: [],
     liked: false,
     cast: [],
+    creators: [],
+    seasonCount: undefined,
+    episodeCount: undefined,
     savedAt: '',
   };
 }
@@ -62,6 +66,7 @@ function entryToDraft(e: MovieEntry): MovieDraft {
     title: e.title,
     originalTitle: e.originalTitle,
     tmdbId: e.tmdbId,
+    mediaType: e.mediaType ?? 'movie',
     year: e.year,
     runtime: e.runtime,
     director: e.director,
@@ -74,6 +79,9 @@ function entryToDraft(e: MovieEntry): MovieDraft {
     tags: e.tags ?? [],
     liked: e.liked,
     cast: Array.isArray(e.cast) ? e.cast : [],
+    creators: e.creators ?? [],
+    seasonCount: e.seasonCount,
+    episodeCount: e.episodeCount,
     savedAt: '',
   };
 }
@@ -222,6 +230,7 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
         title,
         originalTitle: draft.originalTitle,
         tmdbId: draft.tmdbId,
+        mediaType: draft.mediaType ?? 'movie',
         year: draft.year,
         runtime: draft.runtime,
         director: draft.director,
@@ -236,6 +245,9 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
         // page: re-merge the existing cast's liked flags into whatever cast we
         // have in the draft (keyed by TMDB person id).
         cast: mergeCastLiked(draft.cast, editTarget.cast),
+        creators: draft.creators,
+        seasonCount: draft.seasonCount,
+        episodeCount: draft.episodeCount,
       };
       dispatch({ type: 'updateEntry', payload: { id: editTarget.id, patch: patchPayload } });
       // Stay on the same detail page — strip params only.
@@ -255,6 +267,7 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
     const newEntry: MovieEntry = {
       id,
       tmdbId: draft.tmdbId,
+      mediaType: draft.mediaType ?? 'movie',
       title,
       originalTitle: draft.originalTitle,
       year: draft.year,
@@ -268,6 +281,9 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
       tags: draft.tags,
       liked: draft.liked,
       cast: draft.cast,
+      creators: draft.creators,
+      seasonCount: draft.seasonCount,
+      episodeCount: draft.episodeCount,
       createdAt: now,
       updatedAt: now,
     };
@@ -304,9 +320,10 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
   }, [requestClose, handleSave]);
 
   // --- TMDB selection: pre-fill form fields, then fetch full details. ---
-  const handleTmdbSelect = (hit: TmdbSearchResult) => {
+  const handleTmdbSelect = (hit: TmdbMultiResult) => {
     patch({
       tmdbId: hit.id,
+      mediaType: hit.mediaType,
       title: hit.title || hit.originalTitle,
       originalTitle: hit.originalTitle,
       year: hit.year,
@@ -314,42 +331,80 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
       genres: hit.genres,
       // Reset cast on any new pick — the credits fetch below repopulates.
       cast: [],
+      creators: [],
+      seasonCount: undefined,
+      episodeCount: undefined,
     });
     if (settings.tmdbKey) {
-      // Fire-and-forget detail fetch for runtime + director.
-      getMovieDetails(hit.id, settings.tmdbKey)
-        .then((details) => {
-          patch({
-            runtime: details.runtime || 0,
-            director: details.director || '',
-            // Prefer the localised genre names returned by the details endpoint.
-            genres: details.genres.length > 0 ? details.genres : hit.genres,
+      if (hit.mediaType === 'tv') {
+        // TV: fetch details + aggregate_credits
+        getTvDetails(hit.id, settings.tmdbKey)
+          .then((details) => {
+            patch({
+              runtime: details.runtime || 0,
+              director: details.creators.join(', '),
+              creators: details.creators,
+              genres: details.genres.length > 0 ? details.genres : hit.genres,
+              seasonCount: details.seasonCount,
+              episodeCount: details.episodeCount,
+            });
+          })
+          .catch((err) => {
+            console.warn('[tmdb] getTvDetails failed', err);
           });
-        })
-        .catch((err) => {
-          // Detail enrichment is optional — the user can still save.
-          console.warn('[tmdb] getMovieDetails failed', err);
-        });
-      // Cast prefill — silent on failure so the modal never breaks the save flow.
-      getMovieCredits(hit.id, settings.tmdbKey, { topN: 8 })
-        .then(({ cast }) => {
-          const prefilled: CastMember[] = cast.map((c) => ({
-            id: c.id,
-            name: c.name,
-            character: c.character,
-            profilePath: c.profilePath,
-            liked: false,
-          }));
-          // Merge with whatever the user already had in this draft (edit mode)
-          // so we don't clobber per-actor hearts on re-pick of the same movie.
-          setDraft((d) => ({
-            ...d,
-            cast: mergeCastLiked(prefilled, d.cast),
-          }));
-        })
-        .catch((err) => {
-          console.warn('[tmdb] getMovieCredits failed', err);
-        });
+        getTvCredits(hit.id, settings.tmdbKey, { topN: 8 })
+          .then((cast) => {
+            const prefilled: CastMember[] = cast.map((c) => ({
+              id: c.id,
+              name: c.name,
+              character: c.character,
+              profilePath: c.profilePath,
+              liked: false,
+            }));
+            setDraft((d) => ({
+              ...d,
+              cast: mergeCastLiked(prefilled, d.cast),
+            }));
+          })
+          .catch((err) => {
+            console.warn('[tmdb] getTvCredits failed', err);
+          });
+      } else {
+        // Movie: fetch details + credits
+        getMovieDetails(hit.id, settings.tmdbKey)
+          .then((details) => {
+            patch({
+              runtime: details.runtime || 0,
+              director: details.director || '',
+              // Prefer the localised genre names returned by the details endpoint.
+              genres: details.genres.length > 0 ? details.genres : hit.genres,
+            });
+          })
+          .catch((err) => {
+            // Detail enrichment is optional — the user can still save.
+            console.warn('[tmdb] getMovieDetails failed', err);
+          });
+        // Cast prefill — silent on failure so the modal never breaks the save flow.
+        getMovieCredits(hit.id, settings.tmdbKey, { topN: 8 })
+          .then(({ cast }) => {
+            const prefilled: CastMember[] = cast.map((c) => ({
+              id: c.id,
+              name: c.name,
+              character: c.character,
+              profilePath: c.profilePath,
+              liked: false,
+            }));
+            // Merge with whatever the user already had in this draft (edit mode)
+            // so we don't clobber per-actor hearts on re-pick of the same movie.
+            setDraft((d) => ({
+              ...d,
+              cast: mergeCastLiked(prefilled, d.cast),
+            }));
+          })
+          .catch((err) => {
+            console.warn('[tmdb] getMovieCredits failed', err);
+          });
+      }
     }
   };
 
