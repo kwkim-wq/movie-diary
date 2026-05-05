@@ -562,14 +562,16 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
             >
               본 날짜 <span style={{ color: 'var(--accent)' }}>*</span>
             </label>
-            <input
-              id="movie-modal-watched"
-              className="input"
-              type="date"
-              value={draft.watched}
-              onChange={(e) => patch({ watched: e.target.value })}
-              style={{ fontSize: 14, fontWeight: 500, textAlign: 'left' }}
-            />
+            <div style={{ width: '100%', overflow: 'hidden' }}>
+              <input
+                id="movie-modal-watched"
+                className="input"
+                type="date"
+                value={draft.watched}
+                onChange={(e) => patch({ watched: e.target.value })}
+                style={{ fontSize: 14, fontWeight: 500, WebkitAppearance: 'none', appearance: 'none' }}
+              />
+            </div>
           </div>
 
           {/* Field 3 — rating */}
