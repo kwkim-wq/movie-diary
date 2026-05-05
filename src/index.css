@@ -267,6 +267,11 @@ textarea.input { resize: none; line-height: 1.6; }
   .stats-grid { grid-template-columns: 1fr; }
 }
 
+/* Hide verbose footer hint on mobile — keeps buttons on one line. */
+@media (max-width: 480px) {
+  .modal-footer-hint { display: none !important; }
+}
+
 /* Mobile: full-screen modal. dvh excludes iOS Safari toolbar. */
 @media (max-width: 480px) {
   .movie-modal {
