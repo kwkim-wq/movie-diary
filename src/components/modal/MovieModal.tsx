@@ -22,7 +22,7 @@ import { useMovies } from '../../hooks/useMovies';
 import { entryId } from '../../lib/id';
 import { getMovieCredits, getMovieDetails, getTvCredits, getTvDetails } from '../../lib/tmdb';
 import type { CastMember, MovieDraft, MovieEntry, TmdbMultiResult } from '../../types';
-import { StarInput } from './StarInput';
+import { StarInput, ratingMeaning } from './StarInput';
 import { TagInput } from './TagInput';
 import { TmdbAutocomplete } from './TmdbAutocomplete';
 
@@ -158,6 +158,9 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
     [mode, editTarget],
   );
   const [draft, setDraft] = useState<MovieDraft>(baseline);
+  // Displayed rating for the meaning caption — reflects hover preview while
+  // hovering, else draft.rating (kept in sync via StarInput.onDisplayChange).
+  const [displayRating, setDisplayRating] = useState<number>(baseline.rating);
 
   // Draft hook — only tracks *new* entries (we don't want a half-edited entry
   // to overwrite the next "새 영화 기록" session).
@@ -592,11 +595,19 @@ function ModalShell({ mode, editTarget }: ModalShellProps) {
                 borderRadius: 'var(--radius-sm)',
               }}
             >
-              <StarInput value={draft.rating} onChange={(v) => patch({ rating: v })} pixelSize={20} />
+              <StarInput
+                value={draft.rating}
+                onChange={(v) => patch({ rating: v })}
+                onDisplayChange={setDisplayRating}
+                pixelSize={20}
+              />
               <span style={{ fontSize: 13, fontWeight: 600, color: 'var(--accent)', whiteSpace: 'nowrap' }}>
                 {draft.rating.toFixed(1)}
                 <span style={{ fontSize: 11, fontWeight: 400, color: 'var(--text-faint)' }}> / 5</span>
               </span>
+            </div>
+            <div style={{ fontSize: 12, color: 'var(--text-faint)', marginTop: 6 }}>
+              {ratingMeaning(displayRating)}
             </div>
           </div>
 

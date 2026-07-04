@@ -7,7 +7,7 @@
 //   - keyboard: ←/→ ±0.5, 0–5 sets integer values, Home/End set 0/5.
 //   - role="radiogroup", aria-valuenow/min/max on the wrapper.
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const STAR_PATH =
   'M12 2 L14.7 8.6 L21.8 9.2 L16.5 13.9 L18.1 21 L12 17.2 L5.9 21 L7.5 13.9 L2.2 9.2 L9.3 8.6 Z';
@@ -21,6 +21,26 @@ export interface StarInputProps {
   pixelSize?: number;
   /** Custom aria-label for the group. */
   label?: string;
+  /** Fires whenever the displayed value changes (hover preview or value). */
+  onDisplayChange?: (display: number) => void;
+}
+
+// Meaning caption per integer tier. See Issue #17.
+const RATING_TEXT: Record<number, string> = {
+  1: '끝까지 본 게 대단함',
+  2: '굳이 다시 볼 일 없음',
+  3: '한 번으로 충분하지만 후회 없음',
+  4: '언젠가 또 볼 것 같다',
+  5: '몇 번이고 다시 본다',
+};
+
+/** Human-readable meaning for a 0–5 (0.5 step) rating value. */
+export function ratingMeaning(value: number): string {
+  if (value === 0) return '별점을 선택하세요';
+  if (Number.isInteger(value)) return RATING_TEXT[value] ?? '';
+  const base = Math.floor(value);
+  const text = base === 0 ? RATING_TEXT[1] : RATING_TEXT[base];
+  return `${text} ＋`;
 }
 
 function clamp(v: number): number {
@@ -34,9 +54,14 @@ export function StarInput({
   onChange,
   pixelSize = 24,
   label = '별점',
+  onDisplayChange,
 }: StarInputProps) {
   const [hover, setHover] = useState<number | null>(null);
   const display = hover ?? value;
+
+  useEffect(() => {
+    onDisplayChange?.(display);
+  }, [display, onDisplayChange]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     let next = value;
